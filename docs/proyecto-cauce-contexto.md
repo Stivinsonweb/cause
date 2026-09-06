@@ -81,7 +81,7 @@ Los colores de riesgo son deliberadamente terrosos, no un semáforo saturado —
 
 **Backend recomendado:** Python + FastAPI. Vive en el mismo servicio la API REST y los modelos de machine learning (evita duplicar lógica en dos lenguajes). Si se prefiere mantener JavaScript en todo el stack, la alternativa es Node.js + Express, pero entonces el modelo ML se sirve aparte (microservicio Python) o se exporta a ONNX/TensorFlow.js.
 
-**Base de datos:** MySQL 8+, que ya soporta tipos espaciales (`POINT`, `POLYGON`) e índices `SPATIAL` — suficiente para este alcance (ubicar municipios, calcular cercanía a ríos). Si más adelante se necesita análisis espacial más complejo, se evalúa migrar a PostgreSQL + PostGIS.
+**Base de datos:** PostgreSQL + PostGIS (desplegado en Supabase), con tipos espaciales (`geometry(Polygon, 4326)`, `geometry(Point, 4326)`) e índices GIST — suficiente para este alcance (ubicar municipios, calcular cercanía a ríos). *(Nota: el plan original de este documento proponía MySQL 8+ con migración a PostgreSQL solo si hiciera falta análisis espacial más complejo. En la implementación real se migró antes de lo previsto, por preferencia de hosting — Supabase da más garantías de continuidad que las opciones gratuitas de MySQL como db4free.net.)*
 
 **Autenticación:** JWT para los perfiles de entidad/administrador. El ciudadano no necesita cuenta para consultar el mapa.
 
@@ -89,7 +89,13 @@ Los colores de riesgo son deliberadamente terrosos, no un semáforo saturado —
 
 ---
 
-## 4. Modelo de datos (MySQL)
+## 4. Modelo de datos
+
+**El esquema real y vigente es `database/schema.sql` (PostgreSQL/PostGIS)** —
+migrado desde el diseño original en MySQL que se muestra aquí abajo como
+referencia histórica del modelado de datos (las tablas y relaciones son las
+mismas; solo cambia la sintaxis: `AUTO_INCREMENT`→`SERIAL`, `ENUM`→`VARCHAR`
++ `CHECK`, `SPATIAL INDEX`→índice `GIST`, `DATETIME`→`TIMESTAMPTZ`).
 
 ```sql
 CREATE TABLE municipios (
@@ -237,7 +243,7 @@ cauce/
 
 Variables de entorno mínimas (`backend/.env.example`, sin valores reales):
 ```
-DATABASE_URL=mysql+pymysql://usuario:contrasena@host:puerto/nombre_bd
+DATABASE_URL=postgresql+psycopg2://usuario:contrasena@host:puerto/nombre_bd
 JWT_SECRET_KEY=
 JWT_EXPIRATION_MINUTES=60
 IDEAM_API_KEY=
@@ -259,10 +265,15 @@ No existe un solo proveedor que dé gratis, para siempre, frontend + backend + M
 - Render (plan free): funciona bien, la limitación real es que el servicio "duerme" tras un rato de inactividad y tarda unos segundos en despertar en la siguiente petición — aceptable para un MVP/demo académica, no para un sistema de alerta 24/7 real.
 - Fly.io: tiene una capa gratuita pequeña, pide tarjeta de crédito para verificar la cuenta aunque no cobre si te mantienes dentro del límite.
 
-**Base de datos MySQL:**
-- **db4free.net** es la opción más directa: MySQL gratuito de verdad, con phpMyAdmin incluido. Importante: el propio proveedor advierte que es un servicio de *pruebas/educación*, no para producción — puede haber caídas o pérdida de datos. Es adecuado para tu MVP y tu sustentación de maestría, no para un sistema en producción real con comunidades dependiendo de él.
-- Alternativa con más garantías pero más limitada en espacio: Clever Cloud, que ofrece un addon de MySQL pequeño dentro de su plan gratuito.
-- Si en algún punto aceptas migrar a PostgreSQL, hay más opciones gratuitas maduras (Neon, Supabase), pero eso implica ajustar el esquema de este documento.
+**Base de datos — decisión final: PostgreSQL en Supabase.** El plan original de
+este documento recomendaba MySQL (db4free.net como opción gratuita más directa,
+con la advertencia explícita de que es solo para pruebas/educación, no
+producción). En la implementación real se optó por migrar a PostgreSQL/PostGIS
+y desplegar en **Supabase**, que tiene un plan gratuito genuinamente más
+confiable que db4free.net y soporte nativo de datos espaciales. Ver
+`docs/despliegue.md` para los pasos exactos. (Alternativas si Supabase no
+conviniera: Neon, también PostgreSQL gratuito; Clever Cloud si se prefiriera
+quedarse en MySQL.)
 
 **Dominio:**
 - Un dominio propio (`.com`, `.co`) completamente gratis y para siempre, de un registrador serio, prácticamente no existe ya en 2026. Las rutas reales:
@@ -271,7 +282,7 @@ No existe un solo proveedor que dé gratis, para siempre, frontend + backend + M
   - **EU.org** da subdominios gratuitos sin fecha de expiración (`cauce.eu.org`), gratis para siempre.
   - Si estás matriculado activamente en la maestría y tu institución es reconocida por GitHub, el **GitHub Student Developer Pack** incluye dominios gratis por un año (`.me`, `.tech`) — vale la pena revisar si aplicas.
 
-**Recomendación concreta para tu caso (MVP/tesis, sin presupuesto):** Netlify o Vercel para el frontend, Render free para el backend, db4free.net para MySQL, y el subdominio que te da el propio Netlify/Vercel como dominio. Cuando el proyecto pase de demo a algo que la comunidad vaya a usar de verdad, ahí sí vale la pena pagar un dominio `.co` (son baratos, unos pocos dólares al año) y una base de datos administrada de verdad, porque db4free.net explícitamente no da garantías de continuidad.
+**Recomendación concreta para tu caso (MVP/tesis, sin presupuesto) — decisión final:** Netlify para el frontend, Render free para el backend, Supabase para PostgreSQL, y el subdominio que te da el propio Netlify como dominio. Cuando el proyecto pase de demo a algo que la comunidad vaya a usar de verdad, ahí sí vale la pena pagar un dominio `.co` (son baratos, unos pocos dólares al año) y evaluar un plan pago de Supabase si el uso real supera los límites del plan gratuito.
 
 ---
 
@@ -297,7 +308,7 @@ Pensado para ejecutarse en Claude Code, fase por fase, verificando con build/tes
 - `.gitignore` cubriendo `.env`, `node_modules`, `__pycache__`, artefactos de build.
 
 **Fase 1 — Base de datos**
-- Ejecutar el esquema de la sección 4 contra MySQL (local o db4free.net).
+- Ejecutar el esquema de la sección 4 contra PostgreSQL (local o Supabase).
 - Poblar `municipios` y `cuencas` con los seis municipios del MVP (geometrías reales, no las formas ilustrativas del mockup).
 - Cargar datos históricos disponibles de IDEAM/SGC en `mediciones` y `eventos_historicos`.
 
@@ -317,7 +328,7 @@ Pensado para ejecutarse en Claude Code, fase por fase, verificando con build/tes
 - Configurar como PWA para tolerar conexión débil.
 
 **Fase 5 — Despliegue**
-- Desplegar frontend en Netlify/Vercel, backend en Render, base de datos en db4free.net (ver sección 7).
+- Desplegar frontend en Netlify, backend en Render, base de datos en Supabase (ver sección 7 y `docs/despliegue.md`).
 - Configurar variables de entorno de producción.
 - Probar el flujo completo de punta a punta con el dominio/subdominio elegido.
 

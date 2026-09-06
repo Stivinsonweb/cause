@@ -17,6 +17,6 @@
   "loocv_exactitud": 0.59375,
   "loocv_error_ordinal_medio": 0.75,
   "fuente_entrenamiento": "eventos_historicos (prensa/OCHA) + NASA POWER PRECTOTCORR; ejemplos 'bajo' son fechas sin evento registrado (>45 días de distancia), no verificados uno a uno",
-  "entrenado_en": "2026-09-06T15:33:14.995884",
+  "entrenado_en": "2026-09-06T17:37:48.447088",
   "advertencia": "Modelo preliminar entrenado con muestra muy pequeña (n=32). No usar como única fuente de decisión operativa."
 }

@@ -70,12 +70,12 @@ def acumulados_actuales_municipio(db: Session, municipio_id: int) -> dict[str, f
     filas = db.execute(
         text(
             """
-            SELECT DATE(m.fecha_hora) AS fecha, AVG(m.lluvia_mm) AS lluvia_mm
+            SELECT m.fecha_hora::date AS fecha, AVG(m.lluvia_mm) AS lluvia_mm
             FROM mediciones m
             JOIN estaciones e ON e.id = m.estacion_id
             WHERE e.municipio_id = :municipio_id
-              AND m.fecha_hora >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-            GROUP BY DATE(m.fecha_hora)
+              AND m.fecha_hora >= NOW() - INTERVAL '30 days'
+            GROUP BY m.fecha_hora::date
             """
         ),
         {"municipio_id": municipio_id},

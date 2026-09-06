@@ -103,14 +103,14 @@ def historico_municipio(municipio_id: int, dias: int = 90, db: Session = Depends
         text(
             """
             SELECT
-                DATE(m.fecha_hora) AS fecha,
+                m.fecha_hora::date AS fecha,
                 AVG(m.lluvia_mm) AS lluvia_mm_promedio,
                 AVG(m.nivel_rio_m) AS nivel_rio_m_promedio
             FROM mediciones m
             JOIN estaciones e ON e.id = m.estacion_id
             WHERE e.municipio_id = :municipio_id
-              AND m.fecha_hora >= DATE_SUB(NOW(), INTERVAL :dias DAY)
-            GROUP BY DATE(m.fecha_hora)
+              AND m.fecha_hora >= NOW() - make_interval(days => :dias)
+            GROUP BY m.fecha_hora::date
             ORDER BY fecha ASC
             """
         ),

@@ -28,8 +28,8 @@ def alertas_activas(horas: int = 24, db: Session = Depends(get_db)):
              AND ultimas.tipo_evento = p.tipo_evento
              AND ultimas.max_fecha = p.fecha_calculo
             WHERE p.nivel_riesgo <> 'bajo'
-              AND p.fecha_calculo >= DATE_SUB(NOW(), INTERVAL :horas HOUR)
-            ORDER BY FIELD(p.nivel_riesgo, 'critico', 'alto', 'medio'), p.fecha_calculo DESC
+              AND p.fecha_calculo >= NOW() - make_interval(hours => :horas)
+            ORDER BY array_position(ARRAY['critico', 'alto', 'medio'], p.nivel_riesgo), p.fecha_calculo DESC
             """
         ),
         {"horas": horas},

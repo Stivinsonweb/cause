@@ -4,21 +4,26 @@ Estos pasos requieren que tú crees las cuentas — no se pueden automatizar des
 aquí. El repo ya tiene la configuración lista (`render.yaml`, `netlify.toml`) para
 que cada paso sea lo más rápido posible.
 
-## 1. Base de datos — db4free.net
+## 1. Base de datos — Supabase (PostgreSQL + PostGIS)
 
-1. Crea una cuenta gratis en https://www.db4free.net/signup.php (elige un nombre
-   de base de datos, ej. `cauce_prod`, y usuario/contraseña — apúntalos).
-2. Espera el correo de confirmación (puede tardar unos minutos) y actívala.
-3. Entra a phpMyAdmin desde tu panel de db4free.net y ejecuta, en este orden:
-   `database/schema.sql`, luego los 5 archivos de `database/seeds/` en orden
-   numérico (01 a 05).
-4. Con eso tienes el connection string:
-   `mysql+pymysql://TU_USUARIO:TU_CONTRASEÑA@db4free.net:3306/TU_BASE_DE_DATOS`
+El proyecto usa PostgreSQL (no MySQL) precisamente para poder desplegar en
+Supabase, que es más confiable que las opciones gratuitas de MySQL.
 
-**Advertencia (ya está en el contexto del proyecto):** db4free.net es un servicio
-de pruebas/educación, no da garantías de continuidad. Sirve perfecto para el MVP
-y la sustentación; para producción real con comunidades dependiendo del sistema,
-migrar a una base de datos administrada.
+1. Crea una cuenta en https://supabase.com ("Sign up with GitHub" es lo más
+   simple).
+2. **New project**: elige un nombre (ej. `cauce`), una contraseña para la base
+   de datos (apúntala) y la región más cercana a Colombia disponible (ej.
+   `us-east-1`). Espera 1-2 minutos a que se aprovisione.
+3. Ve a **SQL Editor** (panel izquierdo) y ejecuta, pegando el contenido de cada
+   archivo y dando "Run", en este orden: `database/schema.sql`, luego los 5
+   archivos de `database/seeds/` en orden numérico (01 a 05). PostGIS ya viene
+   habilitable con `CREATE EXTENSION IF NOT EXISTS postgis;` — esa línea ya está
+   al inicio de `schema.sql`, no hace falta activarla aparte.
+4. Ve a **Project Settings > Database > Connection string**, elige el modo
+   **Session pooler** (puerto 6543 — mejor para Render en su plan free, que abre
+   pocas conexiones concurrentes) y copia el connection string, cambiando el
+   prefijo a `postgresql+psycopg2://` en vez de `postgresql://`:
+   `postgresql+psycopg2://postgres.XXXX:TU_CONTRASEÑA@aws-0-xxxx.pooler.supabase.com:6543/postgres`
 
 ## 2. Backend — Render
 
@@ -27,7 +32,8 @@ migrar a una base de datos administrada.
 2. En el dashboard: **New > Blueprint**, selecciona el repo `cause` — Render
    detecta automáticamente `render.yaml` en la raíz.
 3. Antes de desplegar, Render te pedirá los valores marcados `sync: false`:
-   - `DATABASE_URL`: el connection string de db4free.net del paso 1.
+   - `DATABASE_URL`: el connection string de Supabase del paso 1 (con
+     `postgresql+psycopg2://`).
    - `IDEAM_API_KEY`: déjalo vacío por ahora.
    - `CORS_ORIGINS`: pon un valor temporal (ej. `http://localhost:4200`) — lo
      actualizas en el paso 4 con la URL real de Netlify.
