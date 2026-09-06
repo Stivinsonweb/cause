@@ -1,8 +1,8 @@
-<ul class="leyenda">
+<ul class="flex flex-col gap-1.5 rounded border border-line bg-paper/95 px-4 py-3 font-sans text-sm">
   @for (nivel of niveles; track nivel) {
-    <li class="leyenda__item">
-      <span class="leyenda__punto" [style.background]="color[nivel]"></span>
-      <span class="leyenda__texto">{{ etiqueta[nivel] }}</span>
+    <li class="flex items-center gap-2">
+      <span class="h-2.5 w-2.5 flex-shrink-0 rounded-full" [style.background]="color[nivel]"></span>
+      <span class="text-ink">{{ etiqueta[nivel] }}</span>
     </li>
   }
 </ul>

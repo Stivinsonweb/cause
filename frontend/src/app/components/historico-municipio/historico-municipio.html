@@ -1,27 +1,27 @@
 @if (!municipio) {
-  <p class="vacio">Selecciona un municipio para ver su histórico.</p>
+  <p class="text-ink-soft">Selecciona un municipio para ver su histórico.</p>
 } @else if (cargando) {
-  <p class="vacio">Cargando histórico de {{ municipio.nombre }}…</p>
+  <p class="text-ink-soft">Cargando histórico de {{ municipio.nombre }}…</p>
 } @else if (historico) {
-  <div class="historico">
-    <section class="historico__bloque">
-      <h3>Eventos documentados</h3>
+  <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+    <section>
+      <h3 class="mb-3 font-serif text-xl font-semibold text-ink">Eventos documentados</h3>
       @if (historico.eventos.length === 0) {
-        <p class="vacio">No hay eventos documentados para este municipio todavía.</p>
+        <p class="text-ink-soft">No hay eventos documentados para este municipio todavía.</p>
       } @else {
-        <ul class="eventos">
+        <ul class="flex flex-col gap-4">
           @for (evento of historico.eventos; track evento.id) {
-            <li class="evento">
-              <span class="evento__punto" [style.background]="color[evento.severidad]"></span>
+            <li class="flex gap-2.5">
+              <span class="mt-1.5 h-2.5 w-2.5 flex-shrink-0 rounded-full" [style.background]="color[evento.severidad]"></span>
               <div>
-                <p class="evento__linea">
+                <p class="text-sm text-ink">
                   <strong>{{ evento.tipo_evento === 'inundacion' ? 'Inundación' : 'Deslizamiento' }}</strong>
                   · {{ evento.fecha | date: 'longDate' }} · {{ evento.severidad }}
                 </p>
                 @if (evento.descripcion) {
-                  <p class="evento__descripcion">{{ evento.descripcion }}</p>
+                  <p class="my-0.5 text-sm text-ink-soft">{{ evento.descripcion }}</p>
                 }
-                <p class="evento__fuente">Fuente: {{ evento.fuente }}</p>
+                <p class="text-xs italic text-ink-soft">Fuente: {{ evento.fuente }}</p>
               </div>
             </li>
           }
@@ -29,27 +29,25 @@
       }
     </section>
 
-    <section class="historico__bloque">
-      <h3>Mediciones recientes</h3>
+    <section>
+      <h3 class="mb-3 font-serif text-xl font-semibold text-ink">Mediciones recientes</h3>
       @if (historico.mediciones_diarias.length === 0) {
-        <p class="vacio">
-          Aún no hay suficientes mediciones acumuladas para mostrar una tendencia.
-        </p>
+        <p class="text-ink-soft">Aún no hay suficientes mediciones acumuladas para mostrar una tendencia.</p>
       } @else {
-        <table class="mediciones">
+        <table class="w-full border-collapse text-sm">
           <thead>
             <tr>
-              <th>Fecha</th>
-              <th>Lluvia (mm)</th>
-              <th>Nivel del río (m)</th>
+              <th class="border-b border-line pb-1 pr-2 text-left font-medium text-ink-soft">Fecha</th>
+              <th class="border-b border-line pb-1 pr-2 text-left font-medium text-ink-soft">Lluvia (mm)</th>
+              <th class="border-b border-line pb-1 pr-2 text-left font-medium text-ink-soft">Nivel del río (m)</th>
             </tr>
           </thead>
           <tbody>
             @for (dia of historico.mediciones_diarias; track dia.fecha) {
               <tr>
-                <td>{{ dia.fecha | date: 'mediumDate' }}</td>
-                <td class="mediciones__dato">{{ dia.lluvia_mm_promedio ?? '—' }}</td>
-                <td class="mediciones__dato">{{ dia.nivel_rio_m_promedio ?? '—' }}</td>
+                <td class="border-b border-line py-1 pr-2">{{ dia.fecha | date: 'mediumDate' }}</td>
+                <td class="border-b border-line py-1 pr-2 font-mono">{{ dia.lluvia_mm_promedio ?? '—' }}</td>
+                <td class="border-b border-line py-1 pr-2 font-mono">{{ dia.nivel_rio_m_promedio ?? '—' }}</td>
               </tr>
             }
           </tbody>

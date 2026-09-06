@@ -1,11 +1,30 @@
-<section class="hero">
-  <div class="hero__contenido">
-    <h1 class="hero__titulo">El Chocó, leído a tiempo</h1>
-    <p class="hero__subtitulo">
+<section class="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-swamp">
+  <video
+    class="absolute inset-0 h-full w-full object-cover opacity-50"
+    autoplay
+    muted
+    loop
+    playsinline
+    poster="/video/rio-choco-poster.jpg"
+  >
+    <source src="/video/rio-choco.mp4" type="video/mp4" />
+  </video>
+  <div class="absolute inset-0 bg-gradient-to-b from-swamp/70 via-swamp/60 to-swamp"></div>
+
+  <div class="relative z-10 mx-auto max-w-2xl px-6 text-center text-paper animate-[aparecer_0.8s_ease-out]">
+    <h1 class="font-serif text-4xl font-semibold leading-tight sm:text-5xl md:text-6xl">
+      El Chocó, leído a tiempo
+    </h1>
+    <p class="mx-auto mt-4 max-w-xl text-balance text-base text-paper/85 sm:text-lg">
       Cauce combina lluvia y nivel de los ríos para estimar el riesgo de inundación y
       deslizamiento en seis municipios del Chocó. No es una predicción exacta: es una
       lectura temprana para decidir a tiempo.
     </p>
-    <a class="hero__cta" href="#mapa">Ver el mapa de riesgo</a>
+    <a
+      href="#mapa"
+      class="mt-8 inline-block rounded bg-risk-alto px-7 py-3 font-medium text-paper transition-colors hover:bg-[#a94f21]"
+    >
+      Ver el mapa de riesgo
+    </a>
   </div>
 </section>

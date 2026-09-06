@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { AlertaActiva, HistoricoMunicipio, Municipio, RiesgoMunicipio } from '../models/cauce.models';
+import { AlertaActiva, Estadisticas, HistoricoMunicipio, Municipio, RiesgoMunicipio } from '../models/cauce.models';
 
 @Injectable({ providedIn: 'root' })
 export class CauceApiService {
@@ -24,5 +24,9 @@ export class CauceApiService {
 
   alertasActivas(): Observable<AlertaActiva[]> {
     return this.http.get<AlertaActiva[]>(`${this.baseUrl}/alertas/activas`);
+  }
+
+  estadisticas(): Observable<Estadisticas> {
+    return this.http.get<Estadisticas>(`${this.baseUrl}/municipios/estadisticas`);
   }
 }

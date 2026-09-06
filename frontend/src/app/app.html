@@ -2,20 +2,25 @@
 
 <app-hero />
 
-<section id="mapa" class="seccion-mapa">
-  <div class="seccion-mapa__mapa">
+<app-estadisticas [datos]="estadisticas()" />
+
+<section id="mapa" class="grid min-h-[640px] grid-cols-1 bg-paper-dim md:grid-cols-[2fr_1fr]">
+  <div class="relative min-h-[420px]">
     <app-mapa-cuencas
+      class="block h-full w-full"
       [municipios]="municipios()"
       [riesgoPorMunicipio]="riesgoPorMunicipio()"
+      [riesgoDetallePorMunicipio]="riesgoInundacionPorMunicipio()"
       [municipioSeleccionadoId]="municipioSeleccionado()?.id ?? null"
       (municipioSeleccionado)="seleccionarMunicipio($event)"
     />
-    <div class="seccion-mapa__leyenda">
+    <div class="absolute right-4 top-4 z-[1000]">
       <app-leyenda-riesgo />
     </div>
   </div>
-  <div class="seccion-mapa__panel">
+  <div class="border-t border-line md:border-l md:border-t-0">
     <app-panel-riesgo
+      class="block h-full"
       [municipio]="municipioSeleccionado()"
       [riesgo]="riesgoSeleccionado()"
       [cargando]="cargandoDetalle()"
@@ -23,7 +28,13 @@
   </div>
 </section>
 
-<section id="historico" class="seccion-historico">
+<app-slider-riesgo
+  [items]="itemsSlider()"
+  [seleccionadoId]="municipioSeleccionado()?.id ?? null"
+  (seleccionar)="seleccionarMunicipio($event)"
+/>
+
+<section id="historico" class="mx-auto max-w-6xl px-6 py-10">
   <app-historico-municipio
     [municipio]="municipioSeleccionado()"
     [historico]="historicoSeleccionado()"

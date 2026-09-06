@@ -56,3 +56,10 @@ export interface AlertaActiva {
   nivel_riesgo: NivelRiesgo;
   fecha_calculo: string;
 }
+
+export interface Estadisticas {
+  total_municipios: number;
+  poblacion_total: number;
+  estaciones_activas: number;
+  eventos_documentados: number;
+}

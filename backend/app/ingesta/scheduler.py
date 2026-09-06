@@ -92,6 +92,11 @@ def _recalcular_riesgo() -> None:
 
 def iniciar_scheduler() -> BackgroundScheduler:
     scheduler = BackgroundScheduler(timezone="UTC")
-    scheduler.add_job(ejecutar_ingestion, "interval", hours=1, id="ingestion_ideam")
+    # next_run_time=ahora: corre una vez de inmediato al arrancar (si no, con
+    # trigger "interval" la primera corrida real sería recién en 1 hora, dejando
+    # el sitio recién desplegado sin ninguna predicción de riesgo mientras tanto).
+    scheduler.add_job(
+        ejecutar_ingestion, "interval", hours=1, id="ingestion_ideam", next_run_time=datetime.now(timezone.utc)
+    )
     scheduler.start()
     return scheduler

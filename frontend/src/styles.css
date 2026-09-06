@@ -34,3 +34,15 @@ body {
   outline: 2px solid var(--color-teal);
   outline-offset: 1px;
 }
+
+/* Único momento animado del hero (aparición del titular al cargar). */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
