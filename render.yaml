@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: cauce-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.15"
+      - key: DATABASE_URL
+        sync: false # pegar el connection string de db4free.net en el dashboard de Render
+      - key: JWT_SECRET_KEY
+        generateValue: true # Render genera un secreto aleatorio seguro
+      - key: JWT_EXPIRATION_MINUTES
+        value: "60"
+      - key: IDEAM_API_KEY
+        sync: false # dejar vacío hasta tener acceso real a la API de IDEAM
+      - key: ENTORNO
+        value: produccion
+      - key: CORS_ORIGINS
+        sync: false # pegar la URL de Netlify/Vercel una vez desplegado el frontend
