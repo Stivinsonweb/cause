@@ -6,6 +6,7 @@ from app.database import get_db
 from app.geo_utils import polygon_wkt_to_geojson
 from app.models.orm import EventoHistorico, PrediccionRiesgo
 from app.schemas import (
+    EstadisticasOut,
     EventoHistoricoOut,
     HistoricoMunicipioOut,
     MedicionDiariaOut,
@@ -38,6 +39,22 @@ def listar_municipios(db: Session = Depends(get_db)):
         )
         for fila in filas
     ]
+
+
+@router.get("/estadisticas", response_model=EstadisticasOut)
+def estadisticas(db: Session = Depends(get_db)):
+    fila = db.execute(
+        text(
+            """
+            SELECT
+                (SELECT COUNT(*) FROM municipios) AS total_municipios,
+                (SELECT COALESCE(SUM(poblacion_estimada), 0) FROM municipios) AS poblacion_total,
+                (SELECT COUNT(*) FROM estaciones WHERE activa = TRUE) AS estaciones_activas,
+                (SELECT COUNT(*) FROM eventos_historicos) AS eventos_documentados
+            """
+        )
+    ).mappings().one()
+    return EstadisticasOut(**fila)
 
 
 def _municipio_existe(db: Session, municipio_id: int) -> bool:

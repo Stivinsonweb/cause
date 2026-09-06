@@ -77,3 +77,10 @@ class RegistroIngestionOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class EstadisticasOut(BaseModel):
+    total_municipios: int
+    poblacion_total: int
+    estaciones_activas: int
+    eventos_documentados: int
