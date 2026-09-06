@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-swamp: #0f2a2e;
+  --color-teal: #1b4b4f;
+  --color-teal-light: #3f726e;
+  --color-paper: #edefe4;
+  --color-paper-dim: #e2e5d6;
+  --color-ink: #16211f;
+  --color-ink-soft: #46524c;
+  --color-line: #c8cdbc;
+
+  --color-risk-bajo: #4a7c4e;
+  --color-risk-medio: #c99a2e;
+  --color-risk-alto: #c4622d;
+  --color-risk-critico: #9b3a2c;
+
+  --font-serif: "Spectral", Georgia, serif;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Leaflet dibuja sus paths fuera del template de Angular (encapsulación no
+   aplica), así que este override vive en el CSS global. Reemplaza el foco
+   azul por defecto del navegador por uno acorde a la paleta del proyecto. */
+.leaflet-interactive:focus {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 1px;
+}

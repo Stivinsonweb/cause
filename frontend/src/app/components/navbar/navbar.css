@@ -1,0 +1,29 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: #0f2a2e;
+  color: #edefe4;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+.navbar__marca {
+  font-family: 'Spectral', Georgia, serif;
+  font-size: 1.4rem;
+}
+
+.navbar__enlaces {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navbar__enlaces a {
+  color: #edefe4;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.navbar__enlaces a:hover {
+  text-decoration: underline;
+}

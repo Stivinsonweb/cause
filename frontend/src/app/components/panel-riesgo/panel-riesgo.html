@@ -1,0 +1,59 @@
+@if (!municipio) {
+  <div class="panel panel--vacio">
+    <p>Selecciona un municipio en el mapa para ver su riesgo actual.</p>
+  </div>
+} @else {
+  <div class="panel">
+    <h2 class="panel__titulo">{{ municipio.nombre }}</h2>
+    <p class="panel__meta">
+      {{ municipio.departamento }}
+      @if (municipio.poblacion_estimada) {
+        · {{ municipio.poblacion_estimada | number }} habitantes (est.)
+      }
+    </p>
+
+    @if (cargando) {
+      <p class="panel__estado">Calculando riesgo…</p>
+    } @else if (riesgo) {
+      @for (r of riesgo.riesgos; track r.tipo_evento) {
+        <div class="riesgo-card">
+          <div class="riesgo-card__encabezado">
+            <span class="riesgo-card__punto" [style.background]="r.nivel_riesgo ? color[r.nivel_riesgo] : '#C8CDBC'"></span>
+            <span class="riesgo-card__tipo">{{ nombreTipo(r.tipo_evento) }}</span>
+            <span class="riesgo-card__nivel">
+              {{ r.nivel_riesgo ? etiqueta[r.nivel_riesgo] : 'Sin datos aún' }}
+            </span>
+          </div>
+
+          @if (esProxy(r)) {
+            <p class="riesgo-card__aviso">
+              Estimado por aproximación del modelo de inundación — no hay suficientes
+              deslizamientos documentados en este municipio para un modelo propio.
+            </p>
+          }
+
+          @if (r.variables_entrada) {
+            <dl class="riesgo-card__variables">
+              <div>
+                <dt>Lluvia acum. 7d</dt>
+                <dd>{{ r.variables_entrada['lluvia_acum_7d'] }} mm</dd>
+              </div>
+              <div>
+                <dt>Lluvia acum. 15d</dt>
+                <dd>{{ r.variables_entrada['lluvia_acum_15d'] }} mm</dd>
+              </div>
+              <div>
+                <dt>Lluvia acum. 30d</dt>
+                <dd>{{ r.variables_entrada['lluvia_acum_30d'] }} mm</dd>
+              </div>
+            </dl>
+          }
+
+          @if (r.fecha_calculo) {
+            <p class="riesgo-card__fecha">Calculado: {{ r.fecha_calculo | date: 'medium' }}</p>
+          }
+        </div>
+      }
+    }
+  </div>
+}

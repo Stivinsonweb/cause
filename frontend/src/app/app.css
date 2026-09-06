@@ -1,0 +1,42 @@
+.seccion-mapa {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  min-height: 640px;
+  background: #e2e5d6;
+}
+
+.seccion-mapa__mapa {
+  position: relative;
+}
+
+.seccion-mapa__leyenda {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+}
+
+.seccion-mapa__panel {
+  border-left: 1px solid #c8cdbc;
+}
+
+.seccion-historico {
+  padding: 2.5rem 1.5rem;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .seccion-mapa {
+    grid-template-columns: 1fr;
+  }
+
+  .seccion-mapa__mapa {
+    min-height: 420px;
+  }
+
+  .seccion-mapa__panel {
+    border-left: none;
+    border-top: 1px solid #c8cdbc;
+  }
+}

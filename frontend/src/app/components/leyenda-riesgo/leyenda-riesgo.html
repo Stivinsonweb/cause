@@ -1,0 +1,8 @@
+<ul class="leyenda">
+  @for (nivel of niveles; track nivel) {
+    <li class="leyenda__item">
+      <span class="leyenda__punto" [style.background]="color[nivel]"></span>
+      <span class="leyenda__texto">{{ etiqueta[nivel] }}</span>
+    </li>
+  }
+</ul>

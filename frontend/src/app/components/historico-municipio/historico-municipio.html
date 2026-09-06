@@ -1,0 +1,60 @@
+@if (!municipio) {
+  <p class="vacio">Selecciona un municipio para ver su histórico.</p>
+} @else if (cargando) {
+  <p class="vacio">Cargando histórico de {{ municipio.nombre }}…</p>
+} @else if (historico) {
+  <div class="historico">
+    <section class="historico__bloque">
+      <h3>Eventos documentados</h3>
+      @if (historico.eventos.length === 0) {
+        <p class="vacio">No hay eventos documentados para este municipio todavía.</p>
+      } @else {
+        <ul class="eventos">
+          @for (evento of historico.eventos; track evento.id) {
+            <li class="evento">
+              <span class="evento__punto" [style.background]="color[evento.severidad]"></span>
+              <div>
+                <p class="evento__linea">
+                  <strong>{{ evento.tipo_evento === 'inundacion' ? 'Inundación' : 'Deslizamiento' }}</strong>
+                  · {{ evento.fecha | date: 'longDate' }} · {{ evento.severidad }}
+                </p>
+                @if (evento.descripcion) {
+                  <p class="evento__descripcion">{{ evento.descripcion }}</p>
+                }
+                <p class="evento__fuente">Fuente: {{ evento.fuente }}</p>
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="historico__bloque">
+      <h3>Mediciones recientes</h3>
+      @if (historico.mediciones_diarias.length === 0) {
+        <p class="vacio">
+          Aún no hay suficientes mediciones acumuladas para mostrar una tendencia.
+        </p>
+      } @else {
+        <table class="mediciones">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Lluvia (mm)</th>
+              <th>Nivel del río (m)</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (dia of historico.mediciones_diarias; track dia.fecha) {
+              <tr>
+                <td>{{ dia.fecha | date: 'mediumDate' }}</td>
+                <td class="mediciones__dato">{{ dia.lluvia_mm_promedio ?? '—' }}</td>
+                <td class="mediciones__dato">{{ dia.nivel_rio_m_promedio ?? '—' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </section>
+  </div>
+}

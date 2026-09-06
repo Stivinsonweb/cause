@@ -1,0 +1,34 @@
+<app-navbar />
+
+<app-hero />
+
+<section id="mapa" class="seccion-mapa">
+  <div class="seccion-mapa__mapa">
+    <app-mapa-cuencas
+      [municipios]="municipios()"
+      [riesgoPorMunicipio]="riesgoPorMunicipio()"
+      [municipioSeleccionadoId]="municipioSeleccionado()?.id ?? null"
+      (municipioSeleccionado)="seleccionarMunicipio($event)"
+    />
+    <div class="seccion-mapa__leyenda">
+      <app-leyenda-riesgo />
+    </div>
+  </div>
+  <div class="seccion-mapa__panel">
+    <app-panel-riesgo
+      [municipio]="municipioSeleccionado()"
+      [riesgo]="riesgoSeleccionado()"
+      [cargando]="cargandoDetalle()"
+    />
+  </div>
+</section>
+
+<section id="historico" class="seccion-historico">
+  <app-historico-municipio
+    [municipio]="municipioSeleccionado()"
+    [historico]="historicoSeleccionado()"
+    [cargando]="cargandoDetalle()"
+  />
+</section>
+
+<app-footer-fuentes />
