@@ -1,17 +1,35 @@
 <section id="como-funciona" class="mx-auto max-w-5xl px-6 py-14">
-  <h2 class="font-serif text-2xl font-semibold text-ink sm:text-3xl">Cómo funciona</h2>
-  <p class="mt-2 max-w-2xl text-sm text-ink-soft">
-    Cauce es un sistema de <strong>estimación</strong> de riesgo, no de predicción exacta.
-    Así se calcula lo que ves en el mapa.
-  </p>
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
+    <div>
+      <h2 class="font-serif text-2xl font-semibold text-ink sm:text-3xl">Cómo funciona</h2>
+      <p class="mt-2 max-w-lg text-sm text-ink-soft">
+        Cauce es un sistema de <strong>estimación</strong> de riesgo, no de predicción exacta.
+        Así se calcula lo que ves en el mapa.
+      </p>
 
-  <ol class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-    @for (paso of pasos; track paso.numero) {
-      <li>
-        <span class="font-mono text-sm text-risk-alto">{{ paso.numero }}</span>
-        <h3 class="mt-1 font-serif text-lg font-semibold text-ink">{{ paso.titulo }}</h3>
-        <p class="mt-2 text-sm leading-relaxed text-ink-soft">{{ paso.descripcion }}</p>
-      </li>
-    }
-  </ol>
+      <ol class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+        @for (paso of pasos; track paso.numero) {
+          <li>
+            <span class="font-mono text-sm text-risk-alto">{{ paso.numero }}</span>
+            <h3 class="mt-1 font-serif text-lg font-semibold text-ink">{{ paso.titulo }}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-soft">{{ paso.descripcion }}</p>
+          </li>
+        }
+      </ol>
+    </div>
+
+    <figure>
+      <img
+        src="/img/rio-choco-canoa.jpg"
+        alt="Canoa tradicional sobre un río del Chocó, en medio de la selva"
+        class="w-full rounded-lg object-cover"
+        loading="lazy"
+        width="700"
+        height="875"
+      />
+      <figcaption class="mt-2 text-xs text-ink-soft">
+        Un río del Chocó — el mismo tipo de cauce que este sistema monitorea.
+      </figcaption>
+    </figure>
+  </div>
 </section>
