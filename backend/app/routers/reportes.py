@@ -6,12 +6,17 @@ deliberado: evita pánico por un reporte falso y mantiene el modelo automático 
 los reportes ciudadanos como dos fuentes separadas, nunca fusionadas en un solo
 número (así lo consume el frontend: "el modelo estima X" junto a, si aplica,
 "N reportes ciudadanos verificados").
+
+POST /reportes acepta multipart/form-data (no JSON) porque la foto opcional se
+sube en la misma petición — así el límite de 5/hora por IP también protege la
+subida de fotos, no solo el texto del reporte.
 """
 
 import hashlib
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Request, UploadFile
+from pydantic import ValidationError
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -25,6 +30,7 @@ from app.schemas import (
     ReporteComunitarioOut,
 )
 from app.security import require_role
+from app.storage import FotoInvalida, subir_foto_reporte
 
 router = APIRouter(prefix="/reportes", tags=["reportes"])
 
@@ -35,18 +41,42 @@ def _hash_ip(ip: str) -> str:
 
 @router.post("", response_model=ReporteComunitarioOut, status_code=201)
 @limiter.limit("5/hour")
-def crear_reporte(request: Request, datos: ReporteComunitarioCrear, db: Session = Depends(get_db)):
-    existe = db.execute(
-        text("SELECT 1 FROM municipios WHERE id = :id"), {"id": datos.municipio_id}
-    ).first()
+def crear_reporte(
+    request: Request,
+    municipio_id: int = Form(...),
+    tipo_evento: str = Form(...),
+    descripcion: str | None = Form(default=None),
+    zona_aproximada: str | None = Form(default=None),
+    foto: UploadFile | None = File(default=None),
+    db: Session = Depends(get_db),
+):
+    try:
+        datos = ReporteComunitarioCrear(
+            municipio_id=municipio_id,
+            tipo_evento=tipo_evento,  # type: ignore[arg-type]
+            descripcion=descripcion,
+            zona_aproximada=zona_aproximada,
+        )
+    except ValidationError as exc:
+        raise HTTPException(status_code=422, detail=exc.errors())
+
+    existe = db.execute(text("SELECT 1 FROM municipios WHERE id = :id"), {"id": datos.municipio_id}).first()
     if existe is None:
         raise HTTPException(status_code=404, detail="Municipio no encontrado")
+
+    foto_url = None
+    if foto is not None and foto.filename:
+        try:
+            foto_url = subir_foto_reporte(foto.file.read(), foto.content_type or "")
+        except FotoInvalida as exc:
+            raise HTTPException(status_code=422, detail=str(exc))
 
     reporte = ReporteComunitario(
         municipio_id=datos.municipio_id,
         tipo_evento=datos.tipo_evento,
         descripcion=datos.descripcion,
         zona_aproximada=datos.zona_aproximada,
+        foto_url=foto_url,
         estado="pendiente",
         ip_hash=_hash_ip(request.client.host if request.client else "desconocido"),
     )

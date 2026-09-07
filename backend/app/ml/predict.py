@@ -19,6 +19,12 @@ Sequía: solo 1 evento real (Quibdó, 2007) en los 30 municipios. No se reutiliz
 el modelo de inundación aquí porque la señal es la opuesta (poca lluvia, no
 mucha) — se usa una heurística de umbral simple sobre lluvia_acum_15d, ver
 app/ml/heuristica_sequia.py para la calibración contra ese único evento real.
+Requiere al menos COBERTURA_MINIMA_DIAS de los últimos 15 días con mediciones
+reales — con menos, la "suma de 15 días" en realidad solo refleja los pocos
+días que la ingestión alcanzó a capturar (ej. recién desplegado el sistema),
+y como el Chocó nunca tiene 15 días reales de lluvia casi nula, eso disparaba
+"sequía crítica" en casi todos los municipios apenas por falta de historial,
+no por sequía real. Se descubrió viendo el propio sitio en producción.
 
 Municipios sin ninguna estación IDEAM activa (por ahora: Alto Baudó, Bagadó,
 Bajo Baudó, Juradó, Medio Baudó, Sipí) no reciben predicción — un input de puro
@@ -42,6 +48,8 @@ from app.models.orm import PrediccionRiesgo
 
 _modelo = None
 _meta = None
+
+COBERTURA_MINIMA_DIAS = 8  # de 15 — por debajo de esto, la heurística de sequía no es confiable
 
 
 def _cargar_modelo():
@@ -74,15 +82,18 @@ def calcular_riesgo_municipio(db: Session, municipio_id: int) -> list[Prediccion
     nivel_riesgo_inundacion = ORDINAL_SEVERIDAD[clase_predicha]
     probabilidad_inundacion = float(max(probabilidades))
 
-    nivel_sequia, probabilidad_sequia = nivel_riesgo_sequia(variables["lluvia_acum_15d"])
+    predicciones_a_crear = [
+        ("inundacion", nivel_riesgo_inundacion, probabilidad_inundacion, meta["version_modelo"]),
+        ("deslizamiento", nivel_riesgo_inundacion, probabilidad_inundacion, meta["version_modelo"] + "-pd"),
+    ]
+    if variables["dias_con_datos_15d"] >= COBERTURA_MINIMA_DIAS:
+        nivel_sequia, probabilidad_sequia = nivel_riesgo_sequia(variables["lluvia_acum_15d"])
+        predicciones_a_crear.append(("sequia", nivel_sequia, probabilidad_sequia, VERSION_HEURISTICA))
+    # si no hay cobertura mínima, sequía queda sin predicción ("sin datos aún")
 
     ahora = datetime.now(timezone.utc)
     resultados = []
-    for tipo_evento, nivel, probabilidad, version in (
-        ("inundacion", nivel_riesgo_inundacion, probabilidad_inundacion, meta["version_modelo"]),
-        ("deslizamiento", nivel_riesgo_inundacion, probabilidad_inundacion, meta["version_modelo"] + "-pd"),
-        ("sequia", nivel_sequia, probabilidad_sequia, VERSION_HEURISTICA),
-    ):
+    for tipo_evento, nivel, probabilidad, version in predicciones_a_crear:
         prediccion = PrediccionRiesgo(
             municipio_id=municipio_id,
             tipo_evento=tipo_evento,

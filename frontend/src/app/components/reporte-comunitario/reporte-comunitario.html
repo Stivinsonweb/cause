@@ -18,6 +18,14 @@
             @if (r.descripcion) {
               <p class="text-ink-soft">{{ r.descripcion }}</p>
             }
+            @if (r.foto_url) {
+              <img
+                [src]="r.foto_url"
+                alt="Foto adjunta al reporte ciudadano"
+                loading="lazy"
+                class="mt-1.5 max-h-48 rounded border border-line object-cover"
+              />
+            }
             <p class="text-xs text-ink-soft">{{ r.creado_en | date: 'short' }} · verificado</p>
           </li>
         }
@@ -65,6 +73,28 @@
             placeholder="Describe lo que observas (opcional)"
             class="w-full rounded border border-line bg-paper px-2 py-1.5 text-ink"
           ></textarea>
+        </label>
+        <label class="text-sm">
+          <span class="mb-1 block text-ink-soft">Foto (opcional)</span>
+          <input
+            #inputFoto
+            type="file"
+            name="foto"
+            accept="image/jpeg,image/png,image/webp"
+            (change)="seleccionarFoto($event)"
+            class="block w-full text-sm text-ink-soft file:mr-3 file:rounded file:border-0 file:bg-teal file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-paper"
+          />
+          @if (fotoNombre()) {
+            <span class="mt-1 flex items-center gap-2 text-xs text-ink-soft">
+              📷 {{ fotoNombre() }}
+              <button type="button" (click)="quitarFoto(inputFoto)" class="text-risk-critico hover:underline">
+                quitar
+              </button>
+            </span>
+          }
+          @if (errorFoto()) {
+            <span class="mt-1 block text-xs text-risk-critico">{{ errorFoto() }}</span>
+          }
         </label>
 
         @if (error()) {

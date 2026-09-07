@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     ideam_api_key: str = ""
     entorno: str = "desarrollo"
     cors_origins: str = "http://localhost:4200"
+    supabase_url: str = ""
+    supabase_service_key: str = ""
 
     @property
     def cors_origins_lista(self) -> list[str]:

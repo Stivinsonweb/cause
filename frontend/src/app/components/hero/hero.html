@@ -11,6 +11,12 @@
   </video>
   <div class="absolute inset-0 bg-gradient-to-b from-swamp/70 via-swamp/60 to-swamp"></div>
 
+  @if (alertas && alertas.length > 0) {
+    <div class="absolute inset-x-0 top-0 z-20">
+      <app-alertas-activas [alertas]="alertas" />
+    </div>
+  }
+
   <div class="relative z-10 mx-auto max-w-2xl px-6 text-center text-paper animate-[aparecer_0.8s_ease-out]">
     <h1 class="font-serif text-4xl font-semibold leading-tight sm:text-5xl md:text-6xl">
       El Chocó, leído a tiempo

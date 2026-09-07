@@ -10,7 +10,7 @@ services:
       - key: PYTHON_VERSION
         value: "3.13.15"
       - key: DATABASE_URL
-        sync: false # pegar el connection string de db4free.net en el dashboard de Render
+        sync: false # connection string de Supabase (Session pooler), ver docs/despliegue.md
       - key: JWT_SECRET_KEY
         generateValue: true # Render genera un secreto aleatorio seguro
       - key: JWT_EXPIRATION_MINUTES
@@ -21,3 +21,7 @@ services:
         value: produccion
       - key: CORS_ORIGINS
         sync: false # pegar la URL de Netlify/Vercel una vez desplegado el frontend
+      - key: SUPABASE_URL
+        sync: false # URL del proyecto de Supabase (Project Settings > API), ej. https://xxxx.supabase.co
+      - key: SUPABASE_SERVICE_KEY
+        sync: false # clave secreta (service_role / secret key) de Supabase — NUNCA la publishable/anon

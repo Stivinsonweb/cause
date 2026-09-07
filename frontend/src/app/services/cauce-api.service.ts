@@ -50,8 +50,14 @@ export class CauceApiService {
     return this.http.get<ReporteComunitario[]>(`${this.baseUrl}/municipios/${municipioId}/reportes`);
   }
 
-  crearReporte(datos: ReporteComunitarioCrear): Observable<ReporteComunitario> {
-    return this.http.post<ReporteComunitario>(`${this.baseUrl}/reportes`, datos);
+  crearReporte(datos: ReporteComunitarioCrear, foto?: File): Observable<ReporteComunitario> {
+    const formulario = new FormData();
+    formulario.set('municipio_id', String(datos.municipio_id));
+    formulario.set('tipo_evento', datos.tipo_evento);
+    if (datos.descripcion) formulario.set('descripcion', datos.descripcion);
+    if (datos.zona_aproximada) formulario.set('zona_aproximada', datos.zona_aproximada);
+    if (foto) formulario.set('foto', foto);
+    return this.http.post<ReporteComunitario>(`${this.baseUrl}/reportes`, formulario);
   }
 
   reportesModeracion(estado?: EstadoReporte): Observable<ReporteComunitario[]> {

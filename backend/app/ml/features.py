@@ -58,11 +58,15 @@ def acumulados_desde_serie(serie: dict[date, float], fecha_ref: date) -> dict[st
             sum(v for f, v in serie.items() if fecha_ref - timedelta(days=dias - 1) <= f <= fecha_ref), 2
         )
 
+    def dias_con_datos(dias: int) -> int:
+        return sum(1 for f in serie if fecha_ref - timedelta(days=dias - 1) <= f <= fecha_ref)
+
     return {
         "lluvia_acum_7d": suma_ultimos(7),
         "lluvia_acum_15d": suma_ultimos(15),
         "lluvia_acum_30d": suma_ultimos(30),
         "lluvia_acum_90d": suma_ultimos(90),
+        "dias_con_datos_15d": dias_con_datos(15),
     }
 
 

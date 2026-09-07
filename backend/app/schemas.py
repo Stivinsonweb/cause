@@ -92,13 +92,12 @@ EstadoReporte = Literal["pendiente", "verificado", "descartado"]
 
 
 class ReporteComunitarioCrear(BaseModel):
+    # La foto (opcional) no va aquí: el endpoint la recibe como UploadFile en un
+    # multipart/form-data junto a estos campos, ver routers/reportes.py.
     municipio_id: int
     tipo_evento: TipoEventoReporte
     descripcion: str | None = Field(default=None, max_length=1000)
     zona_aproximada: str | None = Field(default=None, max_length=150)
-    # foto_url deliberadamente no expuesto aún: no hay almacenamiento de
-    # archivos configurado (ver docs/despliegue.md). El campo existe en el
-    # esquema para cuando se agregue.
 
 
 class ReporteComunitarioOut(BaseModel):

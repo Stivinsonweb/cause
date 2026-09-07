@@ -1,6 +1,5 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 
-import { AlertasActivas } from '../../components/alertas-activas/alertas-activas';
 import { ComoFunciona } from '../../components/como-funciona/como-funciona';
 import { FooterFuentes } from '../../components/footer-fuentes/footer-fuentes';
 import { Hero } from '../../components/hero/hero';
@@ -27,7 +26,6 @@ import { CauceApiService } from '../../services/cauce-api.service';
   selector: 'app-inicio',
   imports: [
     Navbar,
-    AlertasActivas,
     Hero,
     Estadisticas,
     MapaCuencas,
