@@ -1,0 +1,23 @@
+-- Fuente: Catálogo Nacional de Estaciones del IDEAM (datos.gov.co, dataset hp9r-jxuu),
+-- filtrado por departamento=Choco, municipio en los 8 del lote sur.
+INSERT INTO estaciones (codigo_ideam, nombre, tipo, ubicacion, municipio_id, activa) VALUES
+('0054057010', 'NOANAMA ASERRIO [54057010]', 'hidrometrica', ST_PointFromText('POINT(-76.93 4.67)', 4326), (SELECT id FROM municipios WHERE nombre = 'Medio San Juan'), TRUE),
+('0054020010', 'ANDAGOYA [54020010]', 'pluviometrica', ST_PointFromText('POINT(-76.6965 5.097666667)', 4326), (SELECT id FROM municipios WHERE nombre = 'Medio San Juan'), TRUE),
+('0054020080', 'BEBEDO [54020080]', 'pluviometrica', ST_PointFromText('POINT(-76.82694444 4.932222222)', 4326), (SELECT id FROM municipios WHERE nombre = 'Medio San Juan'), TRUE),
+('0054085010', 'NOANAMA [54085010]', 'mixta', ST_PointFromText('POINT(-76.93425 4.688194444)', 4326), (SELECT id FROM municipios WHERE nombre = 'Medio San Juan'), TRUE),
+('0054027030', 'SALADO EL [54027030]', 'hidrometrica', ST_PointFromText('POINT(-76.8645 4.872555556)', 4326), (SELECT id FROM municipios WHERE nombre = 'Medio San Juan'), FALSE),
+('0054020020', 'NOVITA [54020020]', 'mixta', ST_PointFromText('POINT(-76.605555556 4.955694444)', 4326), (SELECT id FROM municipios WHERE nombre = 'Nóvita'), TRUE),
+('0054025010', 'SAN JOSE PALMAR [54025010]', 'mixta', ST_PointFromText('POINT(-76.676666667 4.898083333)', 4326), (SELECT id FROM municipios WHERE nombre = 'Nóvita'), TRUE),
+('0054027040', 'MAMPI [54027040]', 'hidrometrica', ST_PointFromText('POINT(-76.59047222 4.948861111)', 4326), (SELECT id FROM municipios WHERE nombre = 'Nóvita'), FALSE),
+('0054037050', 'SIPI - AUT  [54037050]', 'hidrometrica', ST_PointFromText('POINT(-76.74 4.69)', 4326), (SELECT id FROM municipios WHERE nombre = 'Sipí'), FALSE),
+('0054067010', 'PALOMILLA  [54067010]', 'hidrometrica', ST_PointFromText('POINT(-76.61666667 4.116666667)', 4326), (SELECT id FROM municipios WHERE nombre = 'Sipí'), FALSE),
+('0054035010', 'SIPI [54035010]', 'mixta', ST_PointFromText('POINT(-76.65 4.666666667)', 4326), (SELECT id FROM municipios WHERE nombre = 'Sipí'), FALSE),
+('0054027050', 'RIO IRO - AUT  [54027050]', 'hidrometrica', ST_PointFromText('POINT(-76.665580556 5.116622222)', 4326), (SELECT id FROM municipios WHERE nombre = 'Río Iró'), TRUE),
+('0054020040', 'VALENCIA LA DIVISA [54020040]', 'pluviometrica', ST_PointFromText('POINT(-76.29083333 4.903861111)', 4326), (SELECT id FROM municipios WHERE nombre = 'San José del Palmar'), TRUE),
+('0054020050', 'SINAI EL [54020050]', 'pluviometrica', ST_PointFromText('POINT(-76.20694444 4.834333333)', 4326), (SELECT id FROM municipios WHERE nombre = 'San José del Palmar'), FALSE),
+('0011030030', 'MANAGRU [11030030]', 'pluviometrica', ST_PointFromText('POINT(-76.72813889 5.334166667)', 4326), (SELECT id FROM municipios WHERE nombre = 'Cantón de San Pablo'), TRUE),
+('0054097010', 'PENITAS [54097010]', 'hidrometrica', ST_PointFromText('POINT(-77.02436111 4.2905)', 4326), (SELECT id FROM municipios WHERE nombre = 'El Litoral del San Juan'), TRUE),
+('0054090010', 'PALESTINA [54090010]', 'pluviometrica', ST_PointFromText('POINT(-77.13555556 4.162611111)', 4326), (SELECT id FROM municipios WHERE nombre = 'El Litoral del San Juan'), TRUE),
+('0054057020', 'LITORAL SAN JUAN - AUT  [54057020]', 'hidrometrica', ST_PointFromText('POINT(-77.0218 4.2454)', 4326), (SELECT id FROM municipios WHERE nombre = 'El Litoral del San Juan'), TRUE),
+('0054055010', 'RIO FRIO-EL DUENDE - AUT [54055010]', 'pluviometrica', ST_PointFromText('POINT(-76.506363889 4.071230556)', 4326), (SELECT id FROM municipios WHERE nombre = 'El Litoral del San Juan'), TRUE),
+('0055015010', 'PIE DE PATO - AUT [55015010]', 'mixta', ST_PointFromText('POINT(-76.97316667 5.521083333)', 4326), (SELECT id FROM municipios WHERE nombre = 'Alto Baudó'), FALSE);
