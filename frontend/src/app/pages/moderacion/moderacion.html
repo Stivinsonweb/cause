@@ -3,6 +3,7 @@
 @if (!auth.usuario()) {
   <main class="flex min-h-[80vh] items-center justify-center px-6">
     <div class="w-full max-w-sm">
+      <svg lucideLock class="mx-auto mb-3 text-teal-light" [size]="24" [strokeWidth]="1.5"></svg>
       <h1 class="text-center font-serif text-2xl font-semibold text-ink">Acceso de entidades</h1>
       <p class="mt-1 text-center text-sm text-ink-soft">
         Inicia sesión para moderar los reportes ciudadanos de tu municipio.
@@ -51,7 +52,14 @@
   <main class="mx-auto max-w-4xl px-6 py-12">
     <div class="flex items-center justify-between">
       <h1 class="font-serif text-2xl font-semibold text-ink">Moderación de reportes</h1>
-      <button type="button" (click)="salir()" class="text-sm text-ink-soft hover:underline">Cerrar sesión</button>
+      <button
+        type="button"
+        (click)="salir()"
+        class="flex items-center gap-1.5 text-sm text-ink-soft hover:underline"
+      >
+        <svg lucideLogOut [size]="15" [strokeWidth]="1.75"></svg>
+        Cerrar sesión
+      </button>
     </div>
 
     <div class="mt-4 flex gap-2">
@@ -95,22 +103,25 @@
               <button
                 type="button"
                 (click)="moderar(r, 'verificado')"
-                class="rounded bg-risk-bajo px-3 py-1.5 text-xs font-medium text-paper"
+                class="flex items-center gap-1.5 rounded bg-risk-bajo px-3 py-1.5 text-xs font-medium text-paper"
               >
+                <svg lucideCheck [size]="14" [strokeWidth]="2"></svg>
                 Verificar
               </button>
               <button
                 type="button"
                 (click)="moderar(r, 'descartado')"
-                class="rounded bg-risk-critico px-3 py-1.5 text-xs font-medium text-paper"
+                class="flex items-center gap-1.5 rounded bg-risk-critico px-3 py-1.5 text-xs font-medium text-paper"
               >
+                <svg lucideX [size]="14" [strokeWidth]="2"></svg>
                 Descartar
               </button>
               <button
                 type="button"
                 (click)="moderar(r, 'pendiente')"
-                class="rounded bg-paper-dim px-3 py-1.5 text-xs font-medium text-ink"
+                class="flex items-center gap-1.5 rounded bg-paper-dim px-3 py-1.5 text-xs font-medium text-ink"
               >
+                <svg lucideClock [size]="14" [strokeWidth]="1.75"></svg>
                 Dejar pendiente
               </button>
             </div>

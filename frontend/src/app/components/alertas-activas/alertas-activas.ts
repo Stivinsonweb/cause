@@ -1,4 +1,5 @@
 import { Component, Input, computed, signal } from '@angular/core';
+import { LucideTriangleAlert } from '@lucide/angular';
 
 import { AlertaActiva } from '../../models/cauce.models';
 import { RIESGO_COLOR, RIESGO_ETIQUETA } from '../../models/riesgo-visual';
@@ -8,7 +9,7 @@ const MAXIMO_VISIBLE = 3;
 
 @Component({
   selector: 'app-alertas-activas',
-  imports: [],
+  imports: [LucideTriangleAlert],
   templateUrl: './alertas-activas.html',
   styleUrl: './alertas-activas.css',
 })

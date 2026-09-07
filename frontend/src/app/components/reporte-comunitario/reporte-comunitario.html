@@ -1,7 +1,7 @@
 @if (municipioId !== null) {
   <div class="border-t border-line pt-4">
     <div class="mb-2 flex items-center gap-2">
-      <span class="text-lg leading-none">👁</span>
+      <svg lucideEye class="text-teal-light" [size]="18" [strokeWidth]="1.75"></svg>
       <h3 class="font-serif text-base font-semibold text-ink">Reportes de la comunidad</h3>
     </div>
 
@@ -85,10 +85,15 @@
             class="block w-full text-sm text-ink-soft file:mr-3 file:rounded file:border-0 file:bg-teal file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-paper"
           />
           @if (fotoNombre()) {
-            <span class="mt-1 flex items-center gap-2 text-xs text-ink-soft">
-              📷 {{ fotoNombre() }}
-              <button type="button" (click)="quitarFoto(inputFoto)" class="text-risk-critico hover:underline">
-                quitar
+            <span class="mt-1 flex items-center gap-1.5 text-xs text-ink-soft">
+              <svg lucideImage [size]="14" [strokeWidth]="1.75"></svg>
+              {{ fotoNombre() }}
+              <button
+                type="button"
+                (click)="quitarFoto(inputFoto)"
+                class="ml-1 flex items-center text-risk-critico hover:underline"
+              >
+                <svg lucideX [size]="14" [strokeWidth]="2"></svg>
               </button>
             </span>
           }

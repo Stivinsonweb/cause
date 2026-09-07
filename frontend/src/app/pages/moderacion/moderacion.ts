@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { LucideCheck, LucideClock, LucideLock, LucideLogOut, LucideX } from '@lucide/angular';
 
 import { Navbar } from '../../components/navbar/navbar';
 import { EstadoReporte, ReporteComunitario } from '../../models/cauce.models';
@@ -9,7 +10,7 @@ import { CauceApiService } from '../../services/cauce-api.service';
 
 @Component({
   selector: 'app-moderacion',
-  imports: [FormsModule, DatePipe, Navbar],
+  imports: [FormsModule, DatePipe, Navbar, LucideCheck, LucideClock, LucideLock, LucideLogOut, LucideX],
   templateUrl: './moderacion.html',
   styleUrl: './moderacion.css',
 })

@@ -1,7 +1,10 @@
 @if (alertas && alertas.length > 0) {
   <div class="border-b border-paper/15 bg-swamp/70 px-6 py-2.5 backdrop-blur-sm">
     <div class="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-5 gap-y-1 overflow-hidden">
-      <span class="text-xs font-medium uppercase tracking-wide text-paper/60">Alertas activas</span>
+      <span class="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-paper/60">
+        <svg lucideTriangleAlert [size]="13" [strokeWidth]="2"></svg>
+        Alertas activas
+      </span>
       @for (alerta of visibles(); track alerta.municipio_id + alerta.tipo_evento) {
         <span class="flex items-center gap-1.5 whitespace-nowrap text-sm text-paper">
           <span class="h-2 w-2 flex-shrink-0 rounded-full" [style.background]="color[alerta.nivel_riesgo]"></span>
