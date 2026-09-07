@@ -1,9 +1,9 @@
 @if (!municipio) {
-  <div class="flex h-full items-center justify-center p-6 text-center text-ink-soft">
+  <div class="flex min-h-[280px] items-center justify-center p-6 text-center text-ink-soft">
     <p>Selecciona un municipio en el mapa para ver su riesgo actual.</p>
   </div>
 } @else {
-  <div class="h-full overflow-y-auto bg-paper p-5">
+  <div class="bg-paper p-5">
     <h2 class="font-serif text-2xl font-semibold text-ink">{{ municipio.nombre }}</h2>
     <p class="mt-1 mb-5 text-sm text-ink-soft">
       {{ municipio.departamento }}

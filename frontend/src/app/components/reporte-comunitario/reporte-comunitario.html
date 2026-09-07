@@ -1,0 +1,100 @@
+@if (municipioId !== null) {
+  <div class="border-t border-line pt-4">
+    <div class="mb-2 flex items-center gap-2">
+      <span class="text-lg leading-none">👁</span>
+      <h3 class="font-serif text-base font-semibold text-ink">Reportes de la comunidad</h3>
+    </div>
+
+    @if (reportesVerificados().length > 0) {
+      <ul class="mb-4 flex flex-col gap-3">
+        @for (r of reportesVerificados(); track r.id) {
+          <li class="text-sm">
+            <p class="text-ink">
+              <strong>{{ nombreTipo(r.tipo_evento) }}</strong>
+              @if (r.zona_aproximada) {
+                · {{ r.zona_aproximada }}
+              }
+            </p>
+            @if (r.descripcion) {
+              <p class="text-ink-soft">{{ r.descripcion }}</p>
+            }
+            <p class="text-xs text-ink-soft">{{ r.creado_en | date: 'short' }} · verificado</p>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="mb-4 text-sm text-ink-soft">Aún no hay reportes ciudadanos verificados para {{ municipioNombre }}.</p>
+    }
+
+    @if (enviado()) {
+      <p class="rounded bg-paper-dim px-3 py-2 text-sm text-ink">
+        Gracias — tu reporte quedó en revisión. Se publicará solo si un moderador lo verifica.
+      </p>
+    } @else if (mostrarFormulario()) {
+      <form (ngSubmit)="enviar()" class="flex flex-col gap-3 rounded border border-line bg-paper-dim p-3">
+        <label class="text-sm">
+          <span class="mb-1 block text-ink-soft">Tipo de fenómeno</span>
+          <select
+            name="tipo_evento"
+            [(ngModel)]="tipoEvento"
+            class="w-full rounded border border-line bg-paper px-2 py-1.5 text-ink"
+          >
+            <option value="inundacion">Inundación</option>
+            <option value="deslizamiento">Deslizamiento</option>
+            <option value="sequia">Sequía</option>
+          </select>
+        </label>
+        <label class="text-sm">
+          <span class="mb-1 block text-ink-soft">Zona aproximada (barrio/vereda)</span>
+          <input
+            type="text"
+            name="zona_aproximada"
+            [(ngModel)]="zonaAproximada"
+            maxlength="150"
+            placeholder="Ej. Barrio Kennedy"
+            class="w-full rounded border border-line bg-paper px-2 py-1.5 text-ink"
+          />
+        </label>
+        <label class="text-sm">
+          <span class="mb-1 block text-ink-soft">¿Qué estás viendo?</span>
+          <textarea
+            name="descripcion"
+            [(ngModel)]="descripcion"
+            maxlength="1000"
+            rows="3"
+            placeholder="Describe lo que observas (opcional)"
+            class="w-full rounded border border-line bg-paper px-2 py-1.5 text-ink"
+          ></textarea>
+        </label>
+
+        @if (error()) {
+          <p class="text-sm text-risk-critico">{{ error() }}</p>
+        }
+
+        <div class="flex items-center gap-3">
+          <button
+            type="submit"
+            [disabled]="enviando()"
+            class="rounded bg-teal px-4 py-2 text-sm font-medium text-paper disabled:opacity-60"
+          >
+            {{ enviando() ? 'Enviando…' : 'Enviar reporte' }}
+          </button>
+          <button type="button" (click)="mostrarFormulario.set(false)" class="text-sm text-ink-soft hover:underline">
+            Cancelar
+          </button>
+        </div>
+        <p class="text-xs text-ink-soft">
+          Tu reporte pasa a revisión antes de publicarse — nunca se muestra en crudo.
+        </p>
+      </form>
+    } @else {
+      <button
+        type="button"
+        (click)="mostrarFormulario.set(true)"
+        class="rounded border border-teal px-4 py-2 text-sm font-medium text-teal hover:bg-teal hover:text-paper"
+      >
+        Reportar lo que ves
+      </button>
+    }
+  </div>
+}

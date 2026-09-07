@@ -4,13 +4,14 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.geo_utils import polygon_wkt_to_geojson
-from app.models.orm import EventoHistorico, PrediccionRiesgo
+from app.models.orm import EventoHistorico, PrediccionRiesgo, ReporteComunitario
 from app.schemas import (
     EstadisticasOut,
     EventoHistoricoOut,
     HistoricoMunicipioOut,
     MedicionDiariaOut,
     MunicipioOut,
+    ReporteComunitarioOut,
     RiesgoMunicipioOut,
     RiesgoTipoOut,
 )
@@ -147,4 +148,20 @@ def historico_municipio(municipio_id: int, dias: int = 90, db: Session = Depends
         municipio_id=municipio_id,
         eventos=eventos,
         mediciones_diarias=mediciones_diarias,
+    )
+
+
+@router.get("/{municipio_id}/reportes", response_model=list[ReporteComunitarioOut])
+def reportes_verificados_municipio(municipio_id: int, db: Session = Depends(get_db)):
+    """Solo reportes ciudadanos ya moderados como 'verificado' — nunca pendientes
+    ni descartados. Este endpoint es público a propósito, por eso no acepta un
+    parámetro `estado`: filtrar por otro estado queda solo en /reportes (protegido)."""
+    if not _municipio_existe(db, municipio_id):
+        raise HTTPException(status_code=404, detail="Municipio no encontrado")
+
+    return (
+        db.query(ReporteComunitario)
+        .filter(ReporteComunitario.municipio_id == municipio_id, ReporteComunitario.estado == "verificado")
+        .order_by(ReporteComunitario.creado_en.desc())
+        .all()
     )

@@ -1,6 +1,7 @@
 from datetime import date, datetime
+from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class MunicipioOut(BaseModel):
@@ -84,3 +85,35 @@ class EstadisticasOut(BaseModel):
     poblacion_total: int
     estaciones_activas: int
     eventos_documentados: int
+
+
+TipoEventoReporte = Literal["inundacion", "deslizamiento", "sequia"]
+EstadoReporte = Literal["pendiente", "verificado", "descartado"]
+
+
+class ReporteComunitarioCrear(BaseModel):
+    municipio_id: int
+    tipo_evento: TipoEventoReporte
+    descripcion: str | None = Field(default=None, max_length=1000)
+    zona_aproximada: str | None = Field(default=None, max_length=150)
+    # foto_url deliberadamente no expuesto aún: no hay almacenamiento de
+    # archivos configurado (ver docs/despliegue.md). El campo existe en el
+    # esquema para cuando se agregue.
+
+
+class ReporteComunitarioOut(BaseModel):
+    id: int
+    municipio_id: int
+    tipo_evento: str
+    descripcion: str | None
+    foto_url: str | None
+    zona_aproximada: str | None
+    estado: str
+    creado_en: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class ReporteComunitarioModeracionPatch(BaseModel):
+    estado: EstadoReporte

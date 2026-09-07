@@ -63,3 +63,23 @@ export interface Estadisticas {
   estaciones_activas: number;
   eventos_documentados: number;
 }
+
+export type EstadoReporte = 'pendiente' | 'verificado' | 'descartado';
+
+export interface ReporteComunitario {
+  id: number;
+  municipio_id: number;
+  tipo_evento: TipoEvento;
+  descripcion: string | null;
+  foto_url: string | null;
+  zona_aproximada: string | null;
+  estado: EstadoReporte;
+  creado_en: string;
+}
+
+export interface ReporteComunitarioCrear {
+  municipio_id: number;
+  tipo_evento: TipoEvento;
+  descripcion?: string;
+  zona_aproximada?: string;
+}

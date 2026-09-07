@@ -90,3 +90,26 @@ class RegistroIngestion(Base):
         Enum("exitoso", "fallido", "parcial", name="estado_ingestion", native_enum=False), nullable=False
     )
     detalle = Column(Text)
+
+
+class ReporteComunitario(Base):
+    __tablename__ = "reportes_comunitarios"
+
+    id = Column(Integer, primary_key=True)
+    municipio_id = Column(Integer, nullable=False)
+    tipo_evento = Column(
+        Enum("inundacion", "deslizamiento", "sequia", name="tipo_evento_reporte", native_enum=False),
+        nullable=False,
+    )
+    descripcion = Column(Text)
+    foto_url = Column(String(255))
+    zona_aproximada = Column(String(150))
+    estado = Column(
+        Enum("pendiente", "verificado", "descartado", name="estado_reporte", native_enum=False),
+        nullable=False,
+        default="pendiente",
+    )
+    creado_en = Column(DateTime(timezone=True), server_default=func.now())
+    moderado_por = Column(Integer)
+    moderado_en = Column(DateTime(timezone=True))
+    ip_hash = Column(String(64))

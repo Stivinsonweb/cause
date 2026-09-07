@@ -8,7 +8,7 @@ from slowapi.errors import RateLimitExceeded
 from app.config import settings
 from app.ingesta.scheduler import iniciar_scheduler
 from app.rate_limit import limiter
-from app.routers import admin, alertas, auth, municipios
+from app.routers import admin, alertas, auth, municipios, reportes
 
 
 @asynccontextmanager
@@ -34,6 +34,7 @@ app.include_router(municipios.router)
 app.include_router(alertas.router)
 app.include_router(auth.router)
 app.include_router(admin.router)
+app.include_router(reportes.router)
 
 
 @app.get("/health")

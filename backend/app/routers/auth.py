@@ -17,5 +17,7 @@ def login(request: Request, datos: LoginRequest, db: Session = Depends(get_db)):
     if usuario is None or not verify_password(datos.contrasena, usuario.contrasena_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
 
-    token = create_access_token(subject=usuario.correo, rol=usuario.rol, municipio_id=usuario.municipio_id)
+    token = create_access_token(
+        subject=usuario.correo, usuario_id=usuario.id, rol=usuario.rol, municipio_id=usuario.municipio_id
+    )
     return TokenOut(access_token=token, rol=usuario.rol)
