@@ -69,7 +69,7 @@ def riesgo_municipio(municipio_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Municipio no encontrado")
 
     riesgos = []
-    for tipo in ("inundacion", "deslizamiento"):
+    for tipo in ("inundacion", "deslizamiento", "sequia"):
         ultima = (
             db.query(PrediccionRiesgo)
             .filter(

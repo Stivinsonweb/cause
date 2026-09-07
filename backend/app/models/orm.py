@@ -40,7 +40,8 @@ class EventoHistorico(Base):
     id = Column(Integer, primary_key=True)
     municipio_id = Column(Integer, nullable=False)
     tipo_evento = Column(
-        Enum("inundacion", "deslizamiento", name="tipo_evento_historico", native_enum=False), nullable=False
+        Enum("inundacion", "deslizamiento", "sequia", name="tipo_evento_historico", native_enum=False),
+        nullable=False,
     )
     fecha = Column(Date, nullable=False)
     severidad = Column(
@@ -56,7 +57,8 @@ class PrediccionRiesgo(Base):
     id = Column(Integer, primary_key=True)
     municipio_id = Column(Integer, nullable=False)
     tipo_evento = Column(
-        Enum("inundacion", "deslizamiento", name="tipo_evento_prediccion", native_enum=False), nullable=False
+        Enum("inundacion", "deslizamiento", "sequia", name="tipo_evento_prediccion", native_enum=False),
+        nullable=False,
     )
     fecha_calculo = Column(DateTime(timezone=True), nullable=False)
     nivel_riesgo = Column(

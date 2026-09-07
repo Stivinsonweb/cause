@@ -1,5 +1,7 @@
 <app-navbar />
 
+<app-alertas-activas [alertas]="alertasActivas()" />
+
 <app-hero />
 
 <app-estadisticas [datos]="estadisticas()" />
@@ -33,6 +35,8 @@
   [seleccionadoId]="municipioSeleccionado()?.id ?? null"
   (seleccionar)="seleccionarMunicipio($event)"
 />
+
+<app-como-funciona />
 
 <section id="historico" class="mx-auto max-w-6xl px-6 py-10">
   <app-historico-municipio

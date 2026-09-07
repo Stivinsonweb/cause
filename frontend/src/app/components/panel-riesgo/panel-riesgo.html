@@ -28,11 +28,8 @@
             </span>
           </div>
 
-          @if (esProxy(r)) {
-            <p class="mb-2 text-[0.78rem] italic text-ink-soft">
-              Estimado por aproximación del modelo de inundación — no hay suficientes
-              deslizamientos documentados en este municipio para un modelo propio.
-            </p>
+          @if (avisoMetodologico(r); as aviso) {
+            <p class="mb-2 text-[0.78rem] italic text-ink-soft">{{ aviso }}</p>
           }
 
           @if (r.variables_entrada) {

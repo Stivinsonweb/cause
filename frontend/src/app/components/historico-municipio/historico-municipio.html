@@ -15,7 +15,13 @@
               <span class="mt-1.5 h-2.5 w-2.5 flex-shrink-0 rounded-full" [style.background]="color[evento.severidad]"></span>
               <div>
                 <p class="text-sm text-ink">
-                  <strong>{{ evento.tipo_evento === 'inundacion' ? 'Inundación' : 'Deslizamiento' }}</strong>
+                  <strong>{{
+                    evento.tipo_evento === 'inundacion'
+                      ? 'Inundación'
+                      : evento.tipo_evento === 'deslizamiento'
+                        ? 'Deslizamiento'
+                        : 'Sequía'
+                  }}</strong>
                   · {{ evento.fecha | date: 'longDate' }} · {{ evento.severidad }}
                 </p>
                 @if (evento.descripcion) {

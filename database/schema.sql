@@ -51,7 +51,7 @@ CREATE INDEX idx_estacion_fecha ON mediciones (estacion_id, fecha_hora);
 CREATE TABLE eventos_historicos (
     id SERIAL PRIMARY KEY,
     municipio_id INT NOT NULL REFERENCES municipios(id),
-    tipo_evento VARCHAR(20) NOT NULL CHECK (tipo_evento IN ('inundacion', 'deslizamiento')),
+    tipo_evento VARCHAR(20) NOT NULL CHECK (tipo_evento IN ('inundacion', 'deslizamiento', 'sequia')),
     fecha DATE NOT NULL,
     severidad VARCHAR(10) NOT NULL CHECK (severidad IN ('bajo', 'medio', 'alto', 'critico')),
     fuente VARCHAR(100) DEFAULT 'UNGRD',
@@ -61,7 +61,7 @@ CREATE TABLE eventos_historicos (
 CREATE TABLE predicciones_riesgo (
     id BIGSERIAL PRIMARY KEY,
     municipio_id INT NOT NULL REFERENCES municipios(id),
-    tipo_evento VARCHAR(20) NOT NULL CHECK (tipo_evento IN ('inundacion', 'deslizamiento')),
+    tipo_evento VARCHAR(20) NOT NULL CHECK (tipo_evento IN ('inundacion', 'deslizamiento', 'sequia')),
     fecha_calculo TIMESTAMPTZ NOT NULL,
     nivel_riesgo VARCHAR(10) NOT NULL CHECK (nivel_riesgo IN ('bajo', 'medio', 'alto', 'critico')),
     probabilidad DECIMAL(5, 4),

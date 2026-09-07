@@ -11,6 +11,11 @@ que ambos fenómenos comparten las mismas variables de entrada (lluvia acumulada
 usamos el modelo de inundación como aproximación (proxy) también para
 deslizamiento, dejándolo explícito en `version_modelo` para que nadie lo confunda
 con un modelo real de deslizamiento.
+
+Sequía: solo 1 evento real (Quibdó, 2007), incluso menos que deslizamiento. No se
+reutiliza el modelo de inundación aquí porque la señal es la opuesta (poca lluvia,
+no mucha) — se usa una heurística de umbral simple sobre lluvia_acum_15d, ver
+app/ml/heuristica_sequia.py para la calibración contra ese único evento real.
 """
 
 import json
@@ -22,6 +27,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.ml.features import acumulados_actuales_municipio
+from app.ml.heuristica_sequia import VERSION_HEURISTICA, nivel_riesgo_sequia
 from app.ml.train import FEATURES, MODEL_PATH, META_PATH, ORDINAL_SEVERIDAD
 from app.models.orm import PrediccionRiesgo
 
@@ -46,20 +52,23 @@ def calcular_riesgo_municipio(db: Session, municipio_id: int) -> list[Prediccion
 
     clase_predicha = modelo.predict(X)[0]
     probabilidades = modelo.predict_proba(X)[0]
-    nivel_riesgo = ORDINAL_SEVERIDAD[clase_predicha]
-    probabilidad = float(max(probabilidades))
+    nivel_riesgo_inundacion = ORDINAL_SEVERIDAD[clase_predicha]
+    probabilidad_inundacion = float(max(probabilidades))
+
+    nivel_sequia, probabilidad_sequia = nivel_riesgo_sequia(variables["lluvia_acum_15d"])
 
     ahora = datetime.now(timezone.utc)
     resultados = []
-    for tipo_evento, version in (
-        ("inundacion", meta["version_modelo"]),
-        ("deslizamiento", meta["version_modelo"] + "-pd"),  # pd = proxy deslizamiento; ver docstring del módulo
+    for tipo_evento, nivel, probabilidad, version in (
+        ("inundacion", nivel_riesgo_inundacion, probabilidad_inundacion, meta["version_modelo"]),
+        ("deslizamiento", nivel_riesgo_inundacion, probabilidad_inundacion, meta["version_modelo"] + "-pd"),
+        ("sequia", nivel_sequia, probabilidad_sequia, VERSION_HEURISTICA),
     ):
         prediccion = PrediccionRiesgo(
             municipio_id=municipio_id,
             tipo_evento=tipo_evento,
             fecha_calculo=ahora,
-            nivel_riesgo=nivel_riesgo,
+            nivel_riesgo=nivel,
             probabilidad=round(probabilidad, 4),
             variables_entrada=variables,
             version_modelo=version,

@@ -1,5 +1,7 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 
+import { AlertasActivas } from './components/alertas-activas/alertas-activas';
+import { ComoFunciona } from './components/como-funciona/como-funciona';
 import { FooterFuentes } from './components/footer-fuentes/footer-fuentes';
 import { Hero } from './components/hero/hero';
 import { HistoricoMunicipio } from './components/historico-municipio/historico-municipio';
@@ -10,6 +12,7 @@ import { PanelRiesgo } from './components/panel-riesgo/panel-riesgo';
 import { Estadisticas } from './components/estadisticas/estadisticas';
 import { MunicipioConRiesgo, SliderRiesgo } from './components/slider-riesgo/slider-riesgo';
 import {
+  AlertaActiva,
   Estadisticas as EstadisticasDatos,
   HistoricoMunicipio as HistoricoMunicipioDatos,
   Municipio,
@@ -23,12 +26,14 @@ import { CauceApiService } from './services/cauce-api.service';
   selector: 'app-root',
   imports: [
     Navbar,
+    AlertasActivas,
     Hero,
     Estadisticas,
     MapaCuencas,
     LeyendaRiesgo,
     PanelRiesgo,
     SliderRiesgo,
+    ComoFunciona,
     HistoricoMunicipio,
     FooterFuentes,
   ],
@@ -40,6 +45,7 @@ export class App implements OnInit {
   protected readonly riesgoPorMunicipio = signal<Map<number, NivelRiesgo | null>>(new Map());
   protected readonly riesgoInundacionPorMunicipio = signal<Map<number, RiesgoTipo | null>>(new Map());
   protected readonly estadisticas = signal<EstadisticasDatos | null>(null);
+  protected readonly alertasActivas = signal<AlertaActiva[] | null>(null);
 
   protected readonly municipioSeleccionado = signal<Municipio | null>(null);
   protected readonly riesgoSeleccionado = signal<RiesgoMunicipio | null>(null);
@@ -61,6 +67,7 @@ export class App implements OnInit {
       this.cargarRiesgoParaMapa(municipios);
     });
     this.api.estadisticas().subscribe((datos) => this.estadisticas.set(datos));
+    this.api.alertasActivas().subscribe((alertas) => this.alertasActivas.set(alertas));
   }
 
   private cargarRiesgoParaMapa(municipios: Municipio[]): void {

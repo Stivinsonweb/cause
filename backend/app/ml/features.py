@@ -62,11 +62,15 @@ def acumulados_desde_serie(serie: dict[date, float], fecha_ref: date) -> dict[st
         "lluvia_acum_7d": suma_ultimos(7),
         "lluvia_acum_15d": suma_ultimos(15),
         "lluvia_acum_30d": suma_ultimos(30),
+        "lluvia_acum_90d": suma_ultimos(90),
     }
 
 
 def acumulados_actuales_municipio(db: Session, municipio_id: int) -> dict[str, float]:
-    """Lluvia acumulada reciente a partir de `mediciones` de las estaciones del municipio."""
+    """Lluvia acumulada reciente a partir de `mediciones` de las estaciones del municipio.
+
+    Ventana de 90 días (no solo 30) porque la sequía es un déficit sostenido de
+    lluvia, no un evento de corto plazo como la inundación."""
     filas = db.execute(
         text(
             """
@@ -74,7 +78,7 @@ def acumulados_actuales_municipio(db: Session, municipio_id: int) -> dict[str, f
             FROM mediciones m
             JOIN estaciones e ON e.id = m.estacion_id
             WHERE e.municipio_id = :municipio_id
-              AND m.fecha_hora >= NOW() - INTERVAL '30 days'
+              AND m.fecha_hora >= NOW() - INTERVAL '90 days'
             GROUP BY m.fecha_hora::date
             """
         ),

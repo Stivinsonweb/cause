@@ -1,5 +1,5 @@
 export type NivelRiesgo = 'bajo' | 'medio' | 'alto' | 'critico';
-export type TipoEvento = 'inundacion' | 'deslizamiento';
+export type TipoEvento = 'inundacion' | 'deslizamiento' | 'sequia';
 
 export interface GeoJsonPolygon {
   type: 'Polygon';
