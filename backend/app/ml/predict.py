@@ -1,21 +1,30 @@
 """Calcula el riesgo actual de un municipio y lo persiste en `predicciones_riesgo`.
 
 Inundación: usa el modelo entrenado en app/ml/train.py (ver ese módulo para las
-limitaciones conocidas del "primer modelo" — backtesting con n=14 no supera un
-baseline trivial, así que esto es un prototipo de pipeline, no un clasificador
-confiable todavía).
+limitaciones conocidas — n=42 eventos reales tras la ampliación a los 30
+municipios del Chocó, mejor que el "primer modelo" con n=14, pero sigue siendo
+un prototipo de pipeline validado con LOOCV, no un clasificador de producción).
 
-Deslizamiento: solo hay 1 evento real verificado en los 6 municipios (Quibdó,
-2022), insuficiente para entrenar nada. Como el propio diseño del proyecto asume
-que ambos fenómenos comparten las mismas variables de entrada (lluvia acumulada),
-usamos el modelo de inundación como aproximación (proxy) también para
-deslizamiento, dejándolo explícito en `version_modelo` para que nadie lo confunda
-con un modelo real de deslizamiento.
+Deslizamiento: 5 eventos reales verificados en todo el departamento (Bahía
+Solano 2017, Quibdó 2022, El Carmen de Atrato 2024, San José del Palmar 2026,
+Bajo Baudó 2026) — sigue siendo poco para entrenar un modelo propio, y además
+3 de los 5 fueron detonados por sismos, no por lluvia, así que mezclarlos con
+el input de lluvia acumulada sería metodológicamente peor que la alternativa
+actual. Como el diseño del proyecto asume que ambos fenómenos comparten las
+mismas variables de entrada, se usa el modelo de inundación como aproximación
+(proxy), dejándolo explícito en `version_modelo` para que nadie lo confunda con
+un modelo real de deslizamiento.
 
-Sequía: solo 1 evento real (Quibdó, 2007), incluso menos que deslizamiento. No se
-reutiliza el modelo de inundación aquí porque la señal es la opuesta (poca lluvia,
-no mucha) — se usa una heurística de umbral simple sobre lluvia_acum_15d, ver
+Sequía: solo 1 evento real (Quibdó, 2007) en los 30 municipios. No se reutiliza
+el modelo de inundación aquí porque la señal es la opuesta (poca lluvia, no
+mucha) — se usa una heurística de umbral simple sobre lluvia_acum_15d, ver
 app/ml/heuristica_sequia.py para la calibración contra ese único evento real.
+
+Municipios sin ninguna estación IDEAM activa (por ahora: Alto Baudó, Bagadó,
+Bajo Baudó, Juradó, Medio Baudó, Sipí) no reciben predicción — un input de puro
+0mm nunca está representado en el entrenamiento real (en el Chocó nunca llueve
+0mm en 90 días) y el modelo extrapolaría sin ningún fundamento. Mejor "sin
+datos" honesto que un nivel de riesgo inventado.
 """
 
 import json
@@ -48,6 +57,16 @@ def _cargar_modelo():
 def calcular_riesgo_municipio(db: Session, municipio_id: int) -> list[PrediccionRiesgo]:
     modelo, meta = _cargar_modelo()
     variables = acumulados_actuales_municipio(db, municipio_id)
+
+    if variables["lluvia_acum_90d"] == 0:
+        # Sin ninguna medición real en 90 días (municipio sin estaciones activas
+        # que la ingestión pueda alimentar) — un input de puro cero nunca está
+        # bien representado en el entrenamiento (en el Chocó nunca llueve
+        # exactamente 0mm en 90 días) y el modelo puede extrapolar mal. Mejor
+        # dejarlo explícitamente sin predicción que inventar un nivel de riesgo
+        # sobre datos inexistentes; la API ya maneja la ausencia como "sin datos".
+        return []
+
     X = [[variables[c] for c in FEATURES]]
 
     clase_predicha = modelo.predict(X)[0]

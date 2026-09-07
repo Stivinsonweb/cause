@@ -11,12 +11,12 @@
     "2": "alto",
     "3": "critico"
   },
-  "n_entrenamiento": 32,
-  "n_eventos_reales": 14,
-  "n_bajo_sintetico": 18,
-  "loocv_exactitud": 0.59375,
-  "loocv_error_ordinal_medio": 0.75,
+  "n_entrenamiento": 117,
+  "n_eventos_reales": 42,
+  "n_bajo_sintetico": 75,
+  "loocv_exactitud": 0.6923076923076923,
+  "loocv_error_ordinal_medio": 0.5128205128205128,
   "fuente_entrenamiento": "eventos_historicos (prensa/OCHA) + NASA POWER PRECTOTCORR; ejemplos 'bajo' son fechas sin evento registrado (>45 días de distancia), no verificados uno a uno",
-  "entrenado_en": "2026-09-06T17:37:48.447088",
-  "advertencia": "Modelo preliminar entrenado con muestra muy pequeña (n=32). No usar como única fuente de decisión operativa."
+  "entrenado_en": "2026-09-06T21:37:59.820725",
+  "advertencia": "Modelo preliminar entrenado con muestra muy pequeña (n=117). No usar como única fuente de decisión operativa."
 }

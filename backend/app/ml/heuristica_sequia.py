@@ -1,6 +1,6 @@
 """Heurística de riesgo de sequía — NO es un modelo entrenado.
 
-Solo existe 1 evento real de sequía documentado en los 6 municipios del MVP
+Solo existe 1 evento real de sequía documentado en los 30 municipios del Chocó
 (Quibdó, feb-2007, ver database/seeds/06_eventos_historicos_sequia.sql) — muy
 poco para entrenar nada. Con ese único dato real disponible, se usa como
 referencia de calibración en vez de un umbral inventado.
