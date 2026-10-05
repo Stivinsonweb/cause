@@ -9,12 +9,12 @@
       <button
         type="button"
         (click)="seleccionar.emit(item.municipio.id)"
-        class="w-64 flex-shrink-0 snap-start rounded-lg border bg-paper p-5 text-left transition-shadow hover:shadow-md"
+        class="w-64 flex-shrink-0 snap-start border bg-paper p-5 text-left transition-colors"
         [class.border-teal]="item.municipio.id === seleccionadoId"
         [class.border-line]="item.municipio.id !== seleccionadoId"
       >
         <div class="flex items-center gap-2">
-          <span class="h-2.5 w-2.5 rounded-full" [style.background]="colorDe(item)"></span>
+          <span class="h-2.5 w-2.5 flex-shrink-0" [style.background]="colorDe(item)"></span>
           <span class="text-xs font-medium uppercase tracking-wide text-ink-soft">
             {{ etiquetaDe(item) }}
           </span>

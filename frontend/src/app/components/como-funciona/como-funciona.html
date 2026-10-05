@@ -7,10 +7,10 @@
         Así se calcula lo que ves en el mapa.
       </p>
 
-      <ol class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <ol class="mt-8 grid grid-cols-1 gap-7 sm:grid-cols-2">
         @for (paso of pasos; track paso.numero) {
-          <li>
-            <span class="font-mono text-sm text-risk-alto">{{ paso.numero }}</span>
+          <li class="border-t border-line pt-3">
+            <span class="font-mono text-2xl font-semibold text-risk-alto">{{ paso.numero }}</span>
             <h3 class="mt-1 font-serif text-lg font-semibold text-ink">{{ paso.titulo }}</h3>
             <p class="mt-2 text-sm leading-relaxed text-ink-soft">{{ paso.descripcion }}</p>
           </li>
@@ -18,16 +18,16 @@
       </ol>
     </div>
 
-    <figure>
+    <figure class="border border-line p-1.5">
       <img
         src="/img/rio-choco-canoa.jpg"
         alt="Canoa tradicional sobre un río del Chocó, en medio de la selva"
-        class="w-full rounded-lg object-cover"
+        class="w-full object-cover"
         loading="lazy"
         width="700"
         height="875"
       />
-      <figcaption class="mt-2 text-xs text-ink-soft">
+      <figcaption class="px-1.5 pb-1 pt-2 text-xs text-ink-soft">
         Un río del Chocó — el mismo tipo de cauce que este sistema monitorea.
       </figcaption>
     </figure>

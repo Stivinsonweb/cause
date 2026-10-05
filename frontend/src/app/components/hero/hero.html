@@ -1,6 +1,6 @@
-<section class="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-swamp">
+<section class="relative flex min-h-[85vh] items-end overflow-hidden bg-swamp">
   <video
-    class="absolute inset-0 h-full w-full object-cover opacity-50"
+    class="absolute inset-0 h-full w-full object-cover opacity-60"
     autoplay
     muted
     loop
@@ -9,7 +9,8 @@
   >
     <source src="/video/rio-choco.mp4" type="video/mp4" />
   </video>
-  <div class="absolute inset-0 bg-gradient-to-b from-swamp/70 via-swamp/60 to-swamp"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-swamp via-swamp/55 to-transparent"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-swamp/70 via-transparent to-transparent"></div>
 
   @if (alertas && alertas.length > 0) {
     <div class="absolute inset-x-0 top-0 z-20">
@@ -17,21 +18,24 @@
     </div>
   }
 
-  <div class="relative z-10 mx-auto max-w-2xl px-6 text-center text-paper animate-[aparecer_0.8s_ease-out]">
-    <h1 class="font-serif text-4xl font-semibold leading-tight sm:text-5xl md:text-6xl">
+  <div class="relative z-10 mx-auto w-full max-w-6xl px-6 pb-16 pt-24 text-paper animate-[aparecer_0.8s_ease-out] sm:pb-20">
+    <p class="font-mono text-xs uppercase tracking-[0.25em] text-paper/60">
+      Sistema de alerta temprana — Chocó
+    </p>
+    <h1 class="mt-4 max-w-2xl font-serif text-4xl font-semibold leading-[1.05] sm:text-5xl md:text-6xl">
       El Chocó, leído a tiempo
     </h1>
-    <p class="mx-auto mt-4 max-w-xl text-balance text-base text-paper/85 sm:text-lg">
+    <p class="mt-5 max-w-lg text-balance text-base text-paper/80 sm:text-lg">
       Cauce combina lluvia y nivel de los ríos para estimar el riesgo de inundación,
       deslizamiento y sequía en los 30 municipios del Chocó. No es una predicción
       exacta: es una lectura temprana para decidir a tiempo.
     </p>
     <a
       href="#mapa"
-      class="mt-8 inline-flex items-center gap-2 rounded bg-risk-alto px-7 py-3 font-medium text-paper transition-colors hover:bg-[#a94f21]"
+      class="mt-8 inline-flex items-center gap-2 border border-paper px-6 py-3 font-mono text-xs uppercase tracking-wide text-paper transition-colors hover:bg-paper hover:text-swamp"
     >
       Ver el mapa de riesgo
-      <svg lucideArrowRight [size]="18" [strokeWidth]="2"></svg>
+      <svg lucideArrowRight [size]="15" [strokeWidth]="2"></svg>
     </a>
   </div>
 </section>

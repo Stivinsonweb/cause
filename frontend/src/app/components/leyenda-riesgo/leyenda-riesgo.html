@@ -1,7 +1,7 @@
-<ul class="flex flex-col gap-1.5 rounded border border-line bg-paper/95 px-4 py-3 font-sans text-sm">
+<ul class="flex flex-col gap-1.5 border border-line bg-paper/95 px-4 py-3 font-sans text-sm">
   @for (nivel of niveles; track nivel) {
     <li class="flex items-center gap-2">
-      <span class="h-2.5 w-2.5 flex-shrink-0 rounded-full" [style.background]="color[nivel]"></span>
+      <span class="h-2.5 w-2.5 flex-shrink-0" [style.background]="color[nivel]"></span>
       <span class="text-ink">{{ etiqueta[nivel] }}</span>
     </li>
   }

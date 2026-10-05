@@ -3,9 +3,9 @@
 @if (!auth.usuario()) {
   <main class="flex min-h-[80vh] items-center justify-center px-6">
     <div class="w-full max-w-sm">
-      <svg lucideLock class="mx-auto mb-3 text-teal-light" [size]="24" [strokeWidth]="1.5"></svg>
-      <h1 class="text-center font-serif text-2xl font-semibold text-ink">Acceso de entidades</h1>
-      <p class="mt-1 text-center text-sm text-ink-soft">
+      <p class="font-mono text-xs uppercase tracking-[0.2em] text-teal-light">Acceso restringido</p>
+      <h1 class="mt-2 font-serif text-2xl font-semibold text-ink">Acceso de entidades</h1>
+      <p class="mt-1 text-sm text-ink-soft">
         Inicia sesión para moderar los reportes ciudadanos de tu municipio.
       </p>
 
@@ -17,7 +17,7 @@
             name="correo"
             required
             [(ngModel)]="correo"
-            class="w-full rounded border border-line bg-paper px-3 py-2 text-ink"
+            class="w-full border border-line bg-paper px-3 py-2 text-ink"
           />
         </label>
         <label class="text-sm">
@@ -27,7 +27,7 @@
             name="contrasena"
             required
             [(ngModel)]="contrasena"
-            class="w-full rounded border border-line bg-paper px-3 py-2 text-ink"
+            class="w-full border border-line bg-paper px-3 py-2 text-ink"
           />
         </label>
         @if (errorLogin()) {
@@ -36,7 +36,7 @@
         <button
           type="submit"
           [disabled]="ingresando()"
-          class="mt-2 rounded bg-teal px-4 py-2 text-sm font-medium text-paper disabled:opacity-60"
+          class="mt-2 border border-teal bg-teal px-4 py-2 font-mono text-xs uppercase tracking-wide text-paper disabled:opacity-60"
         >
           {{ ingresando() ? 'Ingresando…' : 'Ingresar' }}
         </button>
@@ -50,28 +50,28 @@
   </main>
 } @else {
   <main class="mx-auto max-w-4xl px-6 py-12">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between border-b border-line pb-4">
       <h1 class="font-serif text-2xl font-semibold text-ink">Moderación de reportes</h1>
       <button
         type="button"
         (click)="salir()"
-        class="flex items-center gap-1.5 text-sm text-ink-soft hover:underline"
+        class="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-ink-soft hover:text-ink hover:underline"
       >
-        <svg lucideLogOut [size]="15" [strokeWidth]="1.75"></svg>
+        <svg lucideLogOut [size]="14" [strokeWidth]="1.75"></svg>
         Cerrar sesión
       </button>
     </div>
 
-    <div class="mt-4 flex gap-2">
+    <div class="mt-5 flex gap-6 border-b border-line font-mono text-xs uppercase tracking-wide">
       @for (estado of ['pendiente', 'verificado', 'descartado']; track estado) {
         <button
           type="button"
           (click)="cambiarFiltro($any(estado))"
-          class="rounded px-3 py-1.5 text-sm"
-          [class.bg-teal]="filtro() === estado"
-          [class.text-paper]="filtro() === estado"
-          [class.bg-paper-dim]="filtro() !== estado"
-          [class.text-ink]="filtro() !== estado"
+          class="border-b-2 pb-2 pt-1"
+          [class.border-teal]="filtro() === estado"
+          [class.text-ink]="filtro() === estado"
+          [class.border-transparent]="filtro() !== estado"
+          [class.text-ink-soft]="filtro() !== estado"
         >
           {{ estado }}
         </button>
@@ -85,7 +85,7 @@
     } @else {
       <ul class="mt-6 flex flex-col gap-4">
         @for (r of reportes(); track r.id) {
-          <li class="rounded border border-line bg-paper p-4">
+          <li class="border border-line bg-paper p-4">
             <div class="flex items-center justify-between">
               <span class="font-semibold text-ink">{{ nombreTipo(r.tipo_evento) }}</span>
               <span class="text-xs text-ink-soft">{{ r.creado_en | date: 'medium' }}</span>
@@ -97,31 +97,31 @@
               <p class="mt-1 text-sm text-ink">{{ r.descripcion }}</p>
             }
             @if (r.foto_url) {
-              <img [src]="r.foto_url" alt="Foto del reporte" class="mt-2 max-h-64 rounded border border-line" />
+              <img [src]="r.foto_url" alt="Foto del reporte" class="mt-2 max-h-64 border border-line" />
             }
             <div class="mt-3 flex gap-2">
               <button
                 type="button"
                 (click)="moderar(r, 'verificado')"
-                class="flex items-center gap-1.5 rounded bg-risk-bajo px-3 py-1.5 text-xs font-medium text-paper"
+                class="flex items-center gap-1.5 border border-risk-bajo px-3 py-1.5 font-mono text-xs uppercase tracking-wide text-risk-bajo hover:bg-risk-bajo hover:text-paper"
               >
-                <svg lucideCheck [size]="14" [strokeWidth]="2"></svg>
+                <svg lucideCheck [size]="13" [strokeWidth]="2"></svg>
                 Verificar
               </button>
               <button
                 type="button"
                 (click)="moderar(r, 'descartado')"
-                class="flex items-center gap-1.5 rounded bg-risk-critico px-3 py-1.5 text-xs font-medium text-paper"
+                class="flex items-center gap-1.5 border border-risk-critico px-3 py-1.5 font-mono text-xs uppercase tracking-wide text-risk-critico hover:bg-risk-critico hover:text-paper"
               >
-                <svg lucideX [size]="14" [strokeWidth]="2"></svg>
+                <svg lucideX [size]="13" [strokeWidth]="2"></svg>
                 Descartar
               </button>
               <button
                 type="button"
                 (click)="moderar(r, 'pendiente')"
-                class="flex items-center gap-1.5 rounded bg-paper-dim px-3 py-1.5 text-xs font-medium text-ink"
+                class="flex items-center gap-1.5 border border-line px-3 py-1.5 font-mono text-xs uppercase tracking-wide text-ink-soft hover:border-ink-soft hover:text-ink"
               >
-                <svg lucideClock [size]="14" [strokeWidth]="1.75"></svg>
+                <svg lucideClock [size]="13" [strokeWidth]="1.75"></svg>
                 Dejar pendiente
               </button>
             </div>

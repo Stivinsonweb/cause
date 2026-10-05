@@ -12,7 +12,7 @@
         <ul class="flex flex-col gap-4">
           @for (evento of historico.eventos; track evento.id) {
             <li class="flex gap-2.5">
-              <span class="mt-1.5 h-2.5 w-2.5 flex-shrink-0 rounded-full" [style.background]="color[evento.severidad]"></span>
+              <span class="mt-1.5 h-2.5 w-2.5 flex-shrink-0" [style.background]="color[evento.severidad]"></span>
               <div>
                 <p class="text-sm text-ink">
                   <strong>{{

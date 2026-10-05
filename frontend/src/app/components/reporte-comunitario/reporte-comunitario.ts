@@ -1,14 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component, Input, OnChanges, SimpleChanges, inject, signal } from '@angular/core';
-import { LucideEye, LucideImage, LucideX } from '@lucide/angular';
+import { LucideImage, LucideX } from '@lucide/angular';
 
 import { ReporteComunitario as ReporteComunitarioDatos, TipoEvento } from '../../models/cauce.models';
 import { CauceApiService } from '../../services/cauce-api.service';
 
 @Component({
   selector: 'app-reporte-comunitario',
-  imports: [FormsModule, DatePipe, LucideEye, LucideImage, LucideX],
+  imports: [FormsModule, DatePipe, LucideImage, LucideX],
   templateUrl: './reporte-comunitario.html',
   styleUrl: './reporte-comunitario.css',
 })
