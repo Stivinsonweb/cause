@@ -195,23 +195,6 @@ métricas y supuestos de esa corrida.
 
 ---
 
-## Variables de entorno
-
-`backend/.env` (plantilla en `backend/.env.example`, **nunca se versiona**):
-
-| Variable | Descripción |
-|---|---|
-| `DATABASE_URL` | `postgresql+psycopg2://…` — en Supabase, usar el *Session pooler* (puerto 6543) |
-| `JWT_SECRET_KEY` | Secreto de firma de tokens |
-| `JWT_EXPIRATION_MINUTES` | Vigencia del token (por defecto 60) |
-| `IDEAM_API_KEY` | Opcional, mientras no haya acceso real a la API de IDEAM |
-| `CORS_ORIGINS` | Orígenes permitidos, separados por coma |
-| `SUPABASE_URL` | URL del proyecto de Supabase |
-| `SUPABASE_SERVICE_KEY` | Clave `service_role` — secreta, nunca la publishable/anon |
-| `ENTORNO` | `desarrollo` o `produccion` |
-
----
-
 ## Despliegue
 
 `render.yaml` y `netlify.toml` ya están configurados. Los pasos exactos —crear el
